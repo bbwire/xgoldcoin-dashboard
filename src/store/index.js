@@ -9,7 +9,9 @@ import { commonActions } from './actions/common-actions'
 import { staffActions } from './actions/staff-actions'
 import { settingActions } from './actions/setting-actions'
 import { clientActions } from './actions/client-actions'
-import { loanActions } from './actions/loan-actions'
+import { candidateActions } from './actions/candidate-actions'
+import { applicationActions } from './actions/application-actions'
+import { projectActions } from './actions/project-actions'
 
 // Import Mutations
 import { commonMutations } from './mutations/common-mutations'
@@ -33,7 +35,9 @@ export default new Vuex.Store(
       staffActions,
       settingActions,
       clientActions,
-      loanActions,
+      candidateActions,
+      applicationActions,
+      projectActions,
     ),
     // Mutations
     mutations: Object.assign({}, commonMutations, majorMutations, staffMutations, settingMutations)

@@ -1,22 +1,53 @@
 <template>
   <div >
-    <v-container fluid class="back-cover" grid-list-md text-md-center text-xs-center>
-      <home-summary-cards></home-summary-cards>
+    <v-container fluid class="back-cover" grid-list-md>
+      <v-layout row wrap>
+        <v-flex md4>
+          <v-card >
+            <v-card-text color="white" class="accent--text">
+              <label class="title">Application trend</label>
+            </v-card-text>
+            <v-card-text>
+              <column-chart xtitle="Days" ytitle="Number" :data="chart_data" :download="true"></column-chart>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+
+        <v-flex md4>
+          <v-card >
+              <v-card-text color="white" class="accent--text" >
+                 <label class="title">Projects</label>
+              </v-card-text>
+              <v-card-text>
+                <area-chart xtitle="Days" ytitle="Number" :data="chart_data" :download="true"></area-chart>
+              </v-card-text>
+            </v-card>
+        </v-flex>
+
+        <v-flex md4>
+          <home-summary-cards></home-summary-cards>
+        </v-flex>
+      </v-layout>
     </v-container>
 
     <div class="space-top-20-neg"></div>
     <v-container fluid class="back-cover" grid-list-md>
       <v-layout row wrap >
-        <v-flex md7>
+        <v-flex md6>
           <v-layout wrap>
             <v-flex md12>
 
-              <v-card flat class="elevation-0">
-                <v-card-text color="white" class="accent--text" >
-                  <v-icon color="accent" small>mdi-poll</v-icon> Statistics
-                </v-card-text>
+              <v-card >
+                <v-card-title color="white" class="accent--text" >
+                  <label class="title">Latest clients</label>
+                  <v-spacer></v-spacer>
+                  <v-btn icon small>
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </v-card-title>
+                <v-divider></v-divider>
                 <v-card-text>
-                  <column-chart xtitle="Days" ytitle="Transactions" :data="chart_data" :download="true"></column-chart>
+                  <recent-clients></recent-clients>
                 </v-card-text>
               </v-card>
 
@@ -32,17 +63,17 @@
 
           </v-layout>
         </v-flex>
-        <v-flex md5>
+        <v-flex md6>
           <v-layout wrap>
 
             <v-flex sm12>
-              <v-card flat class=" elevation-0">
+              <v-card>
                 <v-card-text color="white" class="accent--text">
-                  <v-icon color="accent" small>mdi-currency-usd</v-icon> Credits
+                  <label class="title">Latest candidates</label>
                 </v-card-text>
+                <v-divider></v-divider> 
                 <v-card-text>
-                  <!-- <pie-chart :data="surveyors_count" :download="true" :donut="true"></pie-chart> -->
-                  <h3>Coming soon...</h3>
+                  <RecentCandidates />
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -56,10 +87,14 @@
 <script>
 import { mapState } from 'vuex'
 import HomeSummaryCards from '../commons/HomeSummaryCards'
+import RecentClients from '../dashboard/RecentClients'
+import RecentCandidates from '../dashboard/RecentCandidates'
 export default {
   name: 'MainDashboad',
   components: {
-    HomeSummaryCards
+    HomeSummaryCards,
+    RecentClients,
+    RecentCandidates
   },
   data () {
     return {

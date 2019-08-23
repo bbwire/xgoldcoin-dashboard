@@ -20,7 +20,7 @@
                 dark
                 flat
               >
-                <v-toolbar-title>Login</v-toolbar-title>
+                <v-toolbar-title>Forgot password</v-toolbar-title>
                 <div class="flex-grow-1"></div>
                 
                 <v-btn
@@ -33,8 +33,12 @@
               </v-toolbar>
               <v-card-text>
                 <v-form ref="form">
+                    <p>
+                        Please provide your email we can help you recover your password
+                    </p>
                   <v-text-field
                     label="Email"
+                    placeholder="email@example.com"
                     v-model="form_data.email"
                     append-icon="person"
                     type="text"
@@ -42,31 +46,17 @@
                     outlined
                   ></v-text-field>
 
-                  <v-text-field
-                    label="Password"
-                    v-model="form_data.password"
-                    min="8"
-                    :append-icon="e1 ? 'visibility' : 'visibility_off'"
-                    :append-icon-cb="() => (e1 = !e1)"
-                    :type="e1 ? 'password' : 'text'"
-                    @click:append="e1 = !e1"
-                    :rules="[rules.required]"
-                    counter
-                    required
-                    outlined
-                  ></v-text-field>
                 </v-form>
 
                 <v-layout justify-space-between>
-                    <router-link to="/password/recovery">Forgot password</router-link>
+                    <router-link to="/login">Go to login</router-link>
                 </v-layout>
               </v-card-text>
               <v-divider></v-divider>
               <v-card-actions>
                 <div class="flex-grow-1"></div>
-                <v-btn color="primary" @click="login" depressed :loading="isLoading">
-                  <v-icon>mdi-check</v-icon>
-                  Sign in
+                <v-btn color="primary" @click="recovery" depressed :loading="isLoading">
+                  Recover now
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -91,8 +81,6 @@
       return {
         show1: false,
         e1: true,
-        checkbox: false,
-        password: 'Password',
         form_data: {
           email: '',
           password: ''
@@ -119,9 +107,9 @@
         this.$session.set('uid', 1)
         location.reload()
       },
-      login: function () {
+      recovery: function () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('userLogin', this.form_data)
+          this.$store.dispatch('passwordRecovery', this.form_data)
         }
       }
     }

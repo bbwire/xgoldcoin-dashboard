@@ -11,13 +11,16 @@ export default {
     return Api().post('/v1/users', data)
   },
   updateUser (id, data) {
-    return Api().put('/v1/users/' + id, data)
+    return Api().post('/v1/users/' + id, data)
   },
   deleteUser (id) {
     return Api().delete('/v1/users/' + id)
   },
   userLogin (data) {
     return Api().post('/v1/user/login', data)
+  },
+  passwordRecovery (data) {
+    return Api().post('/v1/users/password/recovery', data)
   },
   getAccountBalance (id) {
     return Api().get('/v1/accounts/balance/user/' + id)

@@ -1,46 +1,34 @@
 <template>
   <div>
     <v-layout row wrap class="summary-cards">
-      <v-flex md3 sm6 xs12>
-        <v-card ripple class="text-md-center elevation-0 grey-gradient" raised to="/loans/" tile dark color="indigo">
+      <v-flex xs12>
+        <v-card ripple class="bright-blue-gradient" to="/clients/" dark color="indigo">
           <v-card-text primary-title center class="uppercase">
-            <p class="headline">100</p>
+            <p class="headline">{{clients.length}}</p>
             <p>
               <v-icon >mdi-menu</v-icon> 
-              Transactions
+              Clients
             </p>
           </v-card-text>
         </v-card>
       </v-flex>
 
-      <v-flex md3 sm6 xs12>
-        <v-card class="text-md-center elevation-0 secondary--text green-gradient" to="/clients/" ripple tile flat dark >
-          <v-card-text center class="px-0 uppercase">
-            <p class="headline">0</p>
+      <v-flex xs12>
+        <v-card class="secondary--text green-gradient" to="/candidates/" ripple dark >
+          <v-card-text center class="uppercase">
+            <p class="headline">{{candidates.length}}</p>
             <p>
               <v-icon >mdi-contacts</v-icon> 
-              Accounts
+              Candidates
             </p>
           </v-card-text>
         </v-card>
       </v-flex> 
 
-      <v-flex md3 sm6 xs12>
-        <v-card tile dark flat class="text-md-center brown-gradient" to="/loans/" ripple color="primary">
-          <v-card-text center class="px-0 uppercase">
-            <p class="headline">15</p>
-            <p>
-              <v-icon>mdi-currency-usd</v-icon> 
-              Requests
-            </p>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-
-      <v-flex md3 sm6 xs12>
-        <v-card tile dark flat class="text-md-center elevation-0 blue-green-gradient" to="/users/" ripple color="secondary">
-          <v-card-text center class="px-0 uppercase">
-            <p class="headline">0</p>
+      <v-flex xs12>
+        <v-card dark class="blue-green-gradient" to="/users/" ripple color="secondary">
+          <v-card-text center class="uppercase">
+            <p class="headline">{{users.length}}</p>
             <p>
               <v-icon >mdi-account-multiple</v-icon> 
               Users
@@ -63,10 +51,10 @@ export default {
   },
   computed: {
     ...mapState([
-      'transactions',
+      'applications',
       'users',
-      'transaction_requests',
-      'accounts',
+      'projects',
+      'candidates',
       'clients'
     ])
   }
@@ -111,5 +99,9 @@ export default {
 
   .pale-green-gradient {
     background-image: linear-gradient(to top, #96fbc4 0%, #f9f586 100%);
+  }
+
+  .bright-blue-gradient {
+    background-image: radial-gradient(circle 248px at center, #16d9e3 0%, #30c7ec 47%, #46aef7 100%);
   }
 </style>

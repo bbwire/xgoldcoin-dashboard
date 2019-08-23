@@ -2,18 +2,18 @@
 import Api from '@/services/Api.js'
 
 export default {
-  // Rate services
-  getRates () {
-    return Api().get('/v1/sms/rates')
+  // Country services
+  getCountries () {
+    return Api().get('/v1/countries')
   },
-  addRate (data) {
-    return Api().post('/v1/sms/rates', data)
+  addCountry (data) {
+    return Api().post('/v1/countries', data)
   },
-  editRate (id, data) {
-    return Api().put('/v1/sms/rates/' + id, data)
+  editCountry (id, data) {
+    return Api().put('/v1/countries/' + id, data)
   },
-  deleteRate (id) {
-    return Api().delete('/v1/sms/rates/' + id)
+  deleteCountry (id) {
+    return Api().delete('/v1/countries/' + id)
   },
   // Roles services
   getRoles () {

@@ -1,14 +1,12 @@
 <template>
   <v-container fluid class="back-cover">
-    <v-card flat>
+    <v-card>
       <v-toolbar
-        prominent
         class="elevation-0 accent--text"
-        color="white"
         light
       >
         <v-btn icon >
-          <v-icon color="accent">apps</v-icon>
+          <v-icon color="accent">mdi-apps</v-icon>
         </v-btn>
 
         <v-toolbar-title>
@@ -16,19 +14,21 @@
           </v-toolbar-title>
 
         <v-spacer></v-spacer>
-        <v-btn color="error" @click.native="dialog = false" v-if="selected.length">
-          <v-icon>delete</v-icon> Delete selected
-        </v-btn>
+        <template v-if="$vuetify.breakpoint.smAndUp">
+          <v-btn color="error" @click.native="dialog = false" v-if="selected.length">
+            <v-icon>delete</v-icon> Delete selected
+          </v-btn>
 
-        <v-btn color="accent" @click.native="dialog = true">
-          <v-icon>add</v-icon> New user
-        </v-btn>
+          <v-btn color="accent" class="button-gradient" depressed @click.native="dialog = true">
+            <v-icon>mdi-plus</v-icon> New user
+          </v-btn>
 
-        
+          
 
-        <v-btn icon>
-          <v-icon color="accent">more_vert</v-icon>
-        </v-btn>
+          <v-btn icon>
+            <v-icon color="accent">mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
       </v-toolbar>
       <v-divider></v-divider>
       <v-card-title>       
@@ -38,44 +38,32 @@
               v-model="search"
               append-icon="search"
               label="Search"
-              placeholder="Search"
-              single-line
+              outlined
               color="accent"
           ></v-text-field>
       </v-card-title>
       <v-card-text>
+
         <v-data-table
           v-model="selected"
           :headers="headers"
           :items="users"
-          item-key="id"
-          select-all
+          :single-select="singleSelect"
           :search="search"
+          item-key="id"
+          show-select
           class="elevation-0"
           :loading="isLoading"
-          :rows-per-page-items="rowsPerpage"
+          loading-text="Loading data..."
         >
-          <template v-slot:items="props">
-            <td>
-              <v-checkbox
-                v-model="props.selected"
-                primary
-                hide-details
-              ></v-checkbox>
-            </td>
-            <td>{{ props.index+1 }}</td>
-            <td>{{ props.item.first_name }} {{ props.item.last_name }}</td>
-            <td>{{ props.item.email }}</td>
-            <td>{{ props.item.phone }}</td>
-            <td>{{ props.item.username }}</td>
-            <td >
-              <v-btn icon small @click.native="editItem(props.item)">
-                <v-icon small color="success"> edit </v-icon>
-              </v-btn>
-              <v-btn icon small @click.native="deleteItem(props.item.id)">
-                <v-icon small color="error"> delete </v-icon>
-              </v-btn>
-            </td>
+
+          <template v-slot:item.action="{ item }">
+            <v-icon small class="mr-2" @click="editItem(item)" >
+              mdi-pencil
+            </v-icon>
+            <v-icon small @click="deleteItem(item)" >
+              mdi-delete
+            </v-icon>
           </template>
         </v-data-table>
 
@@ -97,12 +85,38 @@
         <v-card-text>
           <div class="space-20"></div>
           <v-form ref="form" lazy-validation>
-              <v-text-field v-model="form_data.first_name" :rules="[rules.required]" label="First name" placeholder="First name" clearable></v-text-field>
-              <v-text-field v-model="form_data.last_name" :rules="[rules.required]" label="Last name" placeholder="Last name" clearable></v-text-field>
-              <v-text-field v-model="form_data.phone" :rules="[rules.required]" label="Phone" placeholder="Phone" clearable></v-text-field>
-              <v-text-field v-model="form_data.email" :rules="[rules.email]" label="Email" placeholder="Email" clearable></v-text-field>
+              <v-text-field v-model="form_data.first_name" :rules="[rules.required]" label="First name" outlined clearable></v-text-field>
+              <v-text-field v-model="form_data.last_name" :rules="[rules.required]" label="Last name" placeholder="Last name" outlined clearable></v-text-field>
               
-              <v-text-field v-model="form_data.username" :rules="[rules.required]" label="Username" placeholder="Username" clearable></v-text-field>
+              <v-autocomplete
+                :items="sex"
+                v-model="form_data.sex"
+                label="Sex"
+                placeholder="Sex"
+                item-text="name"
+                item-value="name"
+                :rules="[rules.required]"
+                class="space-bottom"
+                 outlined
+              ></v-autocomplete>
+
+              <v-autocomplete
+                :items="roles"
+                v-model="form_data.role_id"
+                label="Role"
+                placeholder="Role"
+                item-text="name"
+                item-value="id"
+                :rules="[rules.required]"
+                class="space-bottom"
+                 outlined
+              ></v-autocomplete>
+              
+              <v-text-field v-model="form_data.phone" :rules="[rules.required]" label="Phone" outlined placeholder="Phone" clearable></v-text-field>
+              <v-text-field v-model="form_data.email" :rules="[rules.email]" label="Email" outlined placeholder="Email" clearable></v-text-field>
+              
+              <v-text-field v-model="form_data.username" :rules="[rules.required]" label="Username" outlined placeholder="Username" clearable></v-text-field>
+              
               <v-text-field 
                 v-model="form_data.password" 
                 :rules="[rules.required]" 
@@ -113,14 +127,15 @@
                 :type="show1 ? 'text' : 'password'"
                 @click:append="show1 = !show1"
                 v-if="form_data.id === 0"
+                 outlined
               ></v-text-field>
           </v-form>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions class="grey lighten-4">
-          <v-btn color="error darken-1" flat @click.native="close">Cancel</v-btn>
+          <v-btn color="error darken-1" depressed dark @click.native="close">Cancel</v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="checkAction(form_data.id)">Save</v-btn>
+          <v-btn color="blue darken-1" depressed dark @click.native="checkAction(form_data.id)">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -139,6 +154,7 @@
       return {
         dialog: false,
         show1: false,
+        singleSelect: false,
         id: 0,
         search: '',
         pagination: {},
@@ -149,9 +165,10 @@
           { text: '#', sortable: true, value: 'index' },
           { text: 'Name', sortable: true, value: 'first_name' },
           { text: 'Email', sortable: true, value: 'email' },
-          { text: 'Phone', sortable: true, value: 'role.name' },
+          { text: 'Phone', sortable: true, value: 'phone' },
+          { text: 'Role', sortable: true, value: 'role.name' },
           { text: 'Username', sortable: true, value: 'username' },
-          { text: 'Action', sortable: false }
+          { text: 'Action', value: 'action', sortable: false }
         ],
         editedIndex: -1,
         form_data: {
@@ -181,6 +198,7 @@
     },
     created () {
       this.$store.dispatch('getUsers')
+      this.$store.dispatch('getRoles')
     },
     computed: {
       back () {

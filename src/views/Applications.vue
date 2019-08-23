@@ -10,7 +10,7 @@
         </v-btn>
 
         <v-toolbar-title>
-          Clients
+          Applications
           </v-toolbar-title>
 
         <v-spacer></v-spacer>
@@ -18,8 +18,8 @@
           <v-btn color="error" @click.native="dialog = false" v-if="selected.length">
             <v-icon>delete</v-icon> Delete selected
           </v-btn>
-<!-- 
-          <v-btn color="accent" class="button-gradient" depressed @click.native="dialog = true">
+
+          <!-- <v-btn color="accent" class="button-gradient" depressed @click.native="dialog = true">
             <v-icon>mdi-plus</v-icon> New user
           </v-btn> -->
 
@@ -47,7 +47,7 @@
         <v-data-table
           v-model="selected"
           :headers="headers"
-          :items="clients"
+          :items="applications"
           :single-select="singleSelect"
           :search="search"
           item-key="id"
@@ -56,11 +56,6 @@
           :loading="isLoading"
           loading-text="Loading data..."
         >
-
-          <template v-slot:item.name="{ item }">
-            <router-link :to="`/clients/details/${item.id}`" >{{item.name}}</router-link>
-          </template>
-
           <template v-slot:item.action="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)" >
               mdi-pencil
@@ -100,10 +95,9 @@
         uid: null,
         headers: [
           { text: '#', sortable: true, value: 'index' },
-          { text: 'Name', sortable: true, value: 'name' },
+          { text: 'Candidate', sortable: true, value: 'candidate.first_name' },
           { text: 'Email', sortable: true, value: 'email' },
-          { text: 'Phone', sortable: true, value: 'phone' },
-          { text: 'Website url', sortable: true, value: 'website_url' },
+          { text: 'Phone', sortable: true, value: 'role.name' },
           { text: 'Username', sortable: true, value: 'username' },
           { text: 'Action', value: 'action', sortable: false }
         ],
@@ -130,11 +124,11 @@
     },
     beforeCreate: function () {
       if (!this.$session.exists()) {
-        this.$router.push('/login/')
+        this.$router.push('/logout/')
       }
     },
     created () {
-      this.$store.dispatch('getClients')
+      this.$store.dispatch('getApplications')
     },
     computed: {
       back () {
@@ -155,7 +149,8 @@
         'errorMessage',
         'successMessage',
         'rules',
-        'clients',
+        'applications',
+        'roles',
         'rowsPerpage',
         'user',
         'sex'
@@ -170,19 +165,19 @@
         }, 300)
       },
       ...mapActions([
-        'getClients'
+        'getApplications'
       ]),
-      deleteClient (id) {
-        this.$store.dispatch('deleteClient', id)
+      deleteApplication (id) {
+        this.$store.dispatch('deleteApplication', id)
       },
       deleteItem (id) {
-        confirm('Are you sure you want to delete?') && this.deleteClient(id)
+        confirm('Are you sure you want to delete?') && this.deleteApplication(id)
       }
     },
     mounted: function () {
       // this.getDevices()
     },
-    name: 'Clients'
+    name: 'Applications'
   }
 </script>
 

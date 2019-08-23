@@ -10,7 +10,7 @@
         </v-btn>
 
         <v-toolbar-title>
-          Clients
+          Candidates
           </v-toolbar-title>
 
         <v-spacer></v-spacer>
@@ -18,8 +18,8 @@
           <v-btn color="error" @click.native="dialog = false" v-if="selected.length">
             <v-icon>delete</v-icon> Delete selected
           </v-btn>
-<!-- 
-          <v-btn color="accent" class="button-gradient" depressed @click.native="dialog = true">
+
+          <!-- <v-btn color="accent" class="button-gradient" depressed @click.native="dialog = true">
             <v-icon>mdi-plus</v-icon> New user
           </v-btn> -->
 
@@ -47,7 +47,7 @@
         <v-data-table
           v-model="selected"
           :headers="headers"
-          :items="clients"
+          :items="candidates"
           :single-select="singleSelect"
           :search="search"
           item-key="id"
@@ -57,8 +57,12 @@
           loading-text="Loading data..."
         >
 
-          <template v-slot:item.name="{ item }">
-            <router-link :to="`/clients/details/${item.id}`" >{{item.name}}</router-link>
+          <template v-slot:item.first_name="{ item }">
+            <router-link :to="`/candidates/details/${item.id}`" >{{item.first_name}}</router-link>
+          </template>
+
+          <template v-slot:item.last_name="{ item }">
+            <router-link :to="`/candidates/details/${item.id}`" >{{item.last_name}}</router-link>
           </template>
 
           <template v-slot:item.action="{ item }">
@@ -100,10 +104,10 @@
         uid: null,
         headers: [
           { text: '#', sortable: true, value: 'index' },
-          { text: 'Name', sortable: true, value: 'name' },
+          { text: 'First Name', sortable: true, value: 'first_name' },
+          { text: 'Last Name', sortable: true, value: 'last_name' },
           { text: 'Email', sortable: true, value: 'email' },
           { text: 'Phone', sortable: true, value: 'phone' },
-          { text: 'Website url', sortable: true, value: 'website_url' },
           { text: 'Username', sortable: true, value: 'username' },
           { text: 'Action', value: 'action', sortable: false }
         ],
@@ -128,13 +132,13 @@
         }
       }
     },
-    beforeCreate: function () {
-      if (!this.$session.exists()) {
-        this.$router.push('/login/')
-      }
-    },
+    // beforeCreate: function () {
+    //   if (!this.$session.exists()) {
+    //     this.$router.push('/logout/')
+    //   }
+    // },
     created () {
-      this.$store.dispatch('getClients')
+      this.$store.dispatch('getCandidates')
     },
     computed: {
       back () {
@@ -155,7 +159,8 @@
         'errorMessage',
         'successMessage',
         'rules',
-        'clients',
+        'candidates',
+        'roles',
         'rowsPerpage',
         'user',
         'sex'
@@ -170,19 +175,19 @@
         }, 300)
       },
       ...mapActions([
-        'getClients'
+        'getCandidates'
       ]),
-      deleteClient (id) {
-        this.$store.dispatch('deleteClient', id)
+      deleteCandidate (id) {
+        this.$store.dispatch('deleteCandidate', id)
       },
       deleteItem (id) {
-        confirm('Are you sure you want to delete?') && this.deleteClient(id)
+        confirm('Are you sure you want to delete?') && this.deleteCandidate(id)
       }
     },
     mounted: function () {
       // this.getDevices()
     },
-    name: 'Clients'
+    name: 'Candidates'
   }
 </script>
 

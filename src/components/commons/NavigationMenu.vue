@@ -7,7 +7,7 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title>Brian Bwire</v-list-item-title>
+            <v-list-item-title>{{user.first_name}} {{user.last_name}}</v-list-item-title>
             <v-list-item-subtitle>Logged In</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>

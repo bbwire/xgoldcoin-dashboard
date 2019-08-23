@@ -10,7 +10,7 @@
         </v-btn>
 
         <v-toolbar-title>
-          Clients
+          Projects
           </v-toolbar-title>
 
         <v-spacer></v-spacer>
@@ -18,10 +18,10 @@
           <v-btn color="error" @click.native="dialog = false" v-if="selected.length">
             <v-icon>delete</v-icon> Delete selected
           </v-btn>
-<!-- 
-          <v-btn color="accent" class="button-gradient" depressed @click.native="dialog = true">
-            <v-icon>mdi-plus</v-icon> New user
-          </v-btn> -->
+
+          <v-btn color="accent" class="button-gradient" depressed to="/projects/new" @click.native="dialog = true">
+            <v-icon>mdi-plus</v-icon> New project
+          </v-btn>
 
           
 
@@ -47,7 +47,7 @@
         <v-data-table
           v-model="selected"
           :headers="headers"
-          :items="clients"
+          :items="projects"
           :single-select="singleSelect"
           :search="search"
           item-key="id"
@@ -56,10 +56,6 @@
           :loading="isLoading"
           loading-text="Loading data..."
         >
-
-          <template v-slot:item.name="{ item }">
-            <router-link :to="`/clients/details/${item.id}`" >{{item.name}}</router-link>
-          </template>
 
           <template v-slot:item.action="{ item }">
             <v-icon small class="mr-2" @click="editItem(item)" >
@@ -100,11 +96,12 @@
         uid: null,
         headers: [
           { text: '#', sortable: true, value: 'index' },
-          { text: 'Name', sortable: true, value: 'name' },
+          { text: 'Title', sortable: true, value: 'title' },
+          { text: 'Contact person', sortable: true, value: 'contact_person' },
           { text: 'Email', sortable: true, value: 'email' },
           { text: 'Phone', sortable: true, value: 'phone' },
-          { text: 'Website url', sortable: true, value: 'website_url' },
-          { text: 'Username', sortable: true, value: 'username' },
+          { text: 'Deadline', sortable: true, value: 'application_end_date' },
+          { text: 'Status', sortable: true, value: 'status' },
           { text: 'Action', value: 'action', sortable: false }
         ],
         editedIndex: -1,
@@ -134,7 +131,7 @@
       }
     },
     created () {
-      this.$store.dispatch('getClients')
+      this.$store.dispatch('getProjects')
     },
     computed: {
       back () {
@@ -150,12 +147,16 @@
       page () {
         return this.$route.params['page'] ? this.$route.params['page'] : 1
       },
+      formTitle () {
+        return this.editedIndex === -1 ? 'New user' : 'Edit user'
+      },
       ...mapState([
         'isLoading',
         'errorMessage',
         'successMessage',
         'rules',
-        'clients',
+        'projects',
+        'roles',
         'rowsPerpage',
         'user',
         'sex'
@@ -170,19 +171,20 @@
         }, 300)
       },
       ...mapActions([
-        'getClients'
+        'getProjects'
       ]),
-      deleteClient (id) {
-        this.$store.dispatch('deleteClient', id)
+      deleteProject (id) {
+        this.$store.dispatch('deleteProject', id)
+        console.log('working...' + id)
       },
       deleteItem (id) {
-        confirm('Are you sure you want to delete?') && this.deleteClient(id)
+        confirm('Are you sure you want to delete?') && this.deleteProject(id)
       }
     },
     mounted: function () {
       // this.getDevices()
     },
-    name: 'Clients'
+    name: 'Projects'
   }
 </script>
 

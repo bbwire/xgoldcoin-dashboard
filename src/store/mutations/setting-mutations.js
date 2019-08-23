@@ -8,6 +8,10 @@ export const settingMutations = {
   [types.ALL_SETTINGS_SUCCESS] (state, payload) {
     state.isLoading = false
     state.settings = payload
+  },
+  [types.ALL_COUNTRIES_SUCCESS] (state, payload) {
+    state.isLoading = false
+    state.countries = payload
   }
 }
 

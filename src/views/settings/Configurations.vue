@@ -1,8 +1,7 @@
 <template>
   <v-container class="back-cover" fluid grid-list-md>
-      <v-card flat>
+      <v-card>
         <v-toolbar
-            prominent
             class="elevation-0 accent--text"
             color="white"
             light
@@ -48,11 +47,11 @@
 
             <v-flex md4 xs12 sm6>
                 <v-text-field
-                v-model="settings.max_account_balance"
+                v-model="settings.max_days"
                 required
                 validate-on-blur
-                label="Max account balance"
-                placeholder="Max account balance"
+                label="Max days"
+                placeholder="Max days"
                 clearable
                 class="space-bottom"
                 ></v-text-field>
@@ -61,11 +60,11 @@
 
             <v-flex md4 xs12 sm6>
                 <v-text-field
-                v-model="settings.transaction_charge"
+                v-model="settings.service_charge"
                 required
                 validate-on-blur
-                label="Transaction charge"
-                placeholder="Transaction charge"
+                label="Service charge"
+                placeholder="Service charge"
                 :rules="[rules.required]"
                 clearable
                 class="space-bottom"
@@ -75,23 +74,37 @@
 
             <div class="space-top-20" style="display: block; margin-top: 20px;"></div>
 
-            <v-flex md4 sm6>
+            <v-flex md6 sm6>
               <label class="space-top-20 bold">Notofications</label>
+
+              <v-layout row>
               
-              <v-switch 
-                v-model="settings.notifications" 
-                label="Receive notifications for transactions" 
+              <v-flex md6 sm6>
+                <v-switch 
+                  v-model="settings.emails" 
+                  label="Send email to clients" 
+                  color="accent" 
+                  :true-value="1" 
+                  :false-value="0"></v-switch>
+              </v-flex>
+
+              <v-flex md6 sm6>
+                <v-switch 
+                v-model="settings.sms" 
+                label="Send sms" 
                 color="accent" 
                 :true-value="1" 
                 :false-value="0"></v-switch>
+              </v-flex>
+              </v-layout>
             </v-flex>
 
-            <v-flex md4 sm6>
-              <label class="space-top-20 bold">Transactions</label>
+            <v-flex md6 sm6>
+              <label class="space-top-20 bold">Payments</label>
               
               <v-switch 
-                v-model="settings.transactions" 
-                label="Transactions approved internally" 
+                v-model="settings.payments" 
+                label="Make online payment" 
                 color="accent" 
                 :true-value="1" 
                 :false-value="0"></v-switch>

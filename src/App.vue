@@ -6,7 +6,7 @@
       permanent
       :clipped="false"
       app
-      v-if="drawer"
+      v-if="menu_display"
       class="blue-gradient-drawer"
     >
       <NavigationMenu />
@@ -22,19 +22,20 @@
       class="elevation-0"
       light
       app
+      v-if="menu_display"
     >
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Dashboard</v-toolbar-title>
+      <v-toolbar-title>Future Options Dashboard </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
       <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
+        <v-icon>people</v-icon>
       </v-btn>
 
       <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
+        <v-icon>notifications</v-icon>
       </v-btn>
 
       <v-menu
@@ -49,11 +50,12 @@
 
         <v-list>
           <v-list-item
-            v-for="n in 5"
-            :key="n"
+            v-for="item in menu_items"
+            :key="item.name"
             @click="() => {}"
+            :to="item.path"
           >
-            <v-list-item-title>Option {{ n }}</v-list-item-title>
+            <v-list-item-title>{{item.name}}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -61,12 +63,13 @@
 
     <v-content>
       <router-view></router-view>
+      <vue-progress-bar v-if="isLoading"></vue-progress-bar>
     </v-content>
   </v-app>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld';
+import { mapState } from 'vuex'
 import NavigationMenu from './components/commons/NavigationMenu'
 
 export default {
@@ -76,17 +79,51 @@ export default {
     NavigationMenu
   },
   data: () => ({
-    drawer: true,
+    uid: null,
     items: [
       ['mdi-email', 'Inbox'],
       ['mdi-account-supervisor-circle', 'Supervisors'],
       ['mdi-clock-start', 'Clock-in'],
     ],
+    menu_items: [
+      {
+        name: 'Settings',
+        path: '/settings'
+      },
+      {
+        name: 'Profile',
+        path: '/profile'
+      },
+      {
+        name: 'Logout',
+        path: '/logout/'
+      }
+    ]
   }),
+  created () {
+    if (this.$session.exists()) {
+      this.uid = this.$session.get('uid')
+      this.$store.dispatch('changeMenuDisplay', true)
+      this.$store.dispatch('getClients')
+      this.$store.dispatch('getCandidates')
+      this.$store.dispatch('getUsers')
+      this.$store.dispatch('getCountries')
+      this.$store.dispatch('getCurrentUser', this.uid)
+    } else {
+      this.$store.dispatch('changeMenuDisplay', false)
+    }
+  },
+  computed: {
+    ...mapState([
+      'isLoading',
+      'menu_display',
+      'user'
+    ])
+  }
 };
 </script>
 
-<style scoped>
+<style>
   .blue-gradient-drawer {
     background-image: linear-gradient(-225deg, #CBBACC 0%, #2580B3 100%);
   }
@@ -98,5 +135,21 @@ export default {
 
   .theme--light.v-application {
     background: #efefef;
+  }
+
+  .button-gradient {
+    background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+  }
+
+  .space-top-20 {
+    margin-top: 20px;
+  }
+
+  .space-top-10 {
+    margin-top: 10px !important;
+  }
+
+  .bold {
+    font-weight: bold;
   }
 </style>

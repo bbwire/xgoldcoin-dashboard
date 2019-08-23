@@ -2,14 +2,13 @@
   <v-container class="back-cover" fluid grid-list-md>
       <v-card flat>
         <v-toolbar
-            prominent
             class="elevation-0 accent--text"
             color="white"
             light
         >
             <v-btn icon>
             <v-icon color="accent">
-                person
+                mdi-account
             </v-icon>
             </v-btn>
 
@@ -23,7 +22,7 @@
             <!-- <v-progress-circular v-if="isLoading" :size="30" :width="2" indeterminate color="white"></v-progress-circular> -->
 
             <v-btn icon>
-            <v-icon color="accent">more_vert</v-icon>
+            <v-icon color="accent">mdi-dots-vertical</v-icon>
             </v-btn>
         </v-toolbar>
         <v-divider></v-divider>

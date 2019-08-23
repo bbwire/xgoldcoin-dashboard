@@ -10,16 +10,28 @@ export const majorMutations = {
     state.isLoading = false
     state.single_client = payload
   },
-  [types.ALL_LOANS_SUCCESS] (state, payload) {
+  [types.ALL_CANDIDATES_SUCCESS] (state, payload) {
     state.isLoading = false
-    state.loans = payload
+    state.candidates = payload
   },
-  [types.SINGLE_LOAN_SUCCESS] (state, payload) {
+  [types.SINGLE_CANDIDATE_SUCCESS] (state, payload) {
     state.isLoading = false
-    state.single_loan = payload
+    state.single_candidate = payload
   },
-  [types.LOAN_SCHEDULE_SUCCESS] (state, payload) {
+  [types.ALL_APPLICATIONS_SUCCESS] (state, payload) {
     state.isLoading = false
-    state.loan_schedule = payload
+    state.applications = payload
+  },
+  [types.SINGLE_APPLICATION_SUCCESS] (state, payload) {
+    state.isLoading = false
+    state.single_application = payload
+  },
+  [types.ALL_PROJECTS_SUCCESS] (state, payload) {
+    state.isLoading = false
+    state.projects = payload
+  },
+  [types.SINGLE_PROJECT_SUCCESS] (state, payload) {
+    state.isLoading = false
+    state.single_project = payload
   },
 }

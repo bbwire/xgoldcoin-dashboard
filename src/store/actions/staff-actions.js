@@ -106,7 +106,26 @@ export const staffActions = {
   // user login
   userLogin ({commit}, data) {
     commit(types.START_LOADING)
+    let self = this
     service.userLogin(data).then(response => {
+      if (response.data.error === false) {
+        console.log(response.data)
+        self._vm.$session.start()
+        self._vm.$session.set('uid', response.data.data.id)
+        location.reload()
+        commit(types.SUCCESS_MESSAGE, response.data.message)
+      } else {
+        console.log(response.data.message)
+        commit(types.ERROR_MESSAGE, response.data.message)
+      }
+    }).catch(error => {
+      console.log(error.message)
+      commit(types.CONNECTION_ERROR_MESSAGE)
+    })
+  },
+  passwordRecovery ({commit}, data) {
+    commit(types.START_LOADING)
+    service.passwordRecovery(data).then(response => {
       if (response.data.error === false) {
         console.log(response.data)
         commit(types.SUCCESS_MESSAGE, response.data.message)
