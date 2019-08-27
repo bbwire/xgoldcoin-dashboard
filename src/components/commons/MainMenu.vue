@@ -28,22 +28,6 @@ export default {
           path: '/'
         },
         {
-          icon: 'mdi-account-multiple',
-          title: 'Clients',
-          path: '/clients/',
-          items: [
-            {
-              title: 'Projects',
-              path: '/client/projects'
-            }
-          ]
-        },
-        {
-          icon: 'mdi-account-multiple',
-          title: 'Candidates',
-          path: '/candidates/'
-        },
-        {
           icon: 'mdi-format-list-bulleted',
           title: 'Projects',
           path: '/projects/'
@@ -54,33 +38,20 @@ export default {
           path: '/applications/'
         },
         {
-          icon: 'mdi-account',
-          title: 'Users',
-          path: '/users/'
+          icon: 'person',
+          title: 'Prifile',
+          path: '/profile/'
         },
         {
-          icon: 'mdi-settings',
-          title: 'Settings',
-          path: '/settings',
-          items: [
-            {
-              icon: 'keyboard_arrow_right',
-              title: 'Configurations',
-              path: '/settings/configurations/'
-            },
-            {
-              icon: 'keyboard_arrow_right',
-              title: 'Roles',
-              path: '/settings/roles/'
-            },
-            //
-          ]
+          icon: 'lock',
+          title: 'Logout',
+          path: '/logout/'
         }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Loans'
+      title: 'Client'
     }
   }
 }

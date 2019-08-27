@@ -19,7 +19,7 @@
             <v-icon>delete</v-icon> Delete selected
           </v-btn>
 
-          <v-btn color="accent" class="button-gradient" depressed to="/projects/new" @click.native="dialog = true">
+          <v-btn color="accent" depressed to="/projects/new" @click.native="dialog = true">
             <v-icon>mdi-plus</v-icon> New project
           </v-btn>
 
@@ -47,7 +47,7 @@
         <v-data-table
           v-model="selected"
           :headers="headers"
-          :items="projects"
+          :items="projects_by_client"
           :single-select="singleSelect"
           :search="search"
           item-key="id"
@@ -57,10 +57,16 @@
           loading-text="Loading data..."
         >
 
+          <template v-slot:item.title="{ item }">
+            <router-link :to="`/projects/details/${item.id}`">{{item.title}}</router-link>
+          </template>
+
           <template v-slot:item.action="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)" >
-              mdi-pencil
-            </v-icon>
+            <v-btn icon small :to="`/projects/details/${item.id}`" >
+              <v-icon small class="mr-2" >
+                mdi-pencil
+              </v-icon>
+            </v-btn>
             <v-icon small @click="deleteItem(item)" >
               mdi-delete
             </v-icon>
@@ -89,49 +95,34 @@
         show1: false,
         singleSelect: false,
         id: 0,
+        uid: null,
         search: '',
         pagination: {},
         selected: [],
         tab: null,
-        uid: null,
         headers: [
           { text: '#', sortable: true, value: 'index' },
           { text: 'Title', sortable: true, value: 'title' },
           { text: 'Contact person', sortable: true, value: 'contact_person' },
-          { text: 'Email', sortable: true, value: 'email' },
-          { text: 'Phone', sortable: true, value: 'phone' },
-          { text: 'Deadline', sortable: true, value: 'application_end_date' },
+          { text: 'Email', sortable: true, value: 'contact_email' },
+          { text: 'Phone', sortable: true, value: 'contact_phone' },
+          { text: 'Deadline', sortable: true, value: 'application_deadline' },
           { text: 'Status', sortable: true, value: 'status' },
           { text: 'Action', value: 'action', sortable: false }
         ],
         editedIndex: -1,
-        form_data: {
-          id: 0,
-          first_name: null,
-          last_name: null,
-          phone: null,
-          email: null,
-          username: null,
-          password: null
-        },
-        default_data: {
-          id: 0,
-          first_name: null,
-          last_name: null,
-          phone: null,
-          email: null,
-          username: null,
-          password: null
-        }
       }
     },
-    beforeCreate: function () {
-      if (!this.$session.exists()) {
-        this.$router.push('/login/')
-      }
-    },
+    // beforeCreate: function () {
+    //   if (!this.$session.exists()) {
+    //     this.$router.push('/login/')
+    //   }
+    // },
     created () {
-      this.$store.dispatch('getProjects')
+      if (this.$session.exists()) {
+        this.uid = this.$session.get('uid')
+        this.$store.dispatch('getProjectsByClient', this.uid)
+      }
     },
     computed: {
       back () {
@@ -155,7 +146,7 @@
         'errorMessage',
         'successMessage',
         'rules',
-        'projects',
+        'projects_by_client',
         'roles',
         'rowsPerpage',
         'user',

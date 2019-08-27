@@ -1,33 +1,7 @@
 <template>
   <div >
     <v-container fluid class="back-cover" grid-list-md>
-      <v-layout row wrap>
-        <v-flex md4>
-          <v-card >
-            <v-card-text color="white" class="accent--text">
-              <label class="title">Application trend</label>
-            </v-card-text>
-            <v-card-text>
-              <column-chart xtitle="Days" ytitle="Number" :data="chart_data" :download="true"></column-chart>
-            </v-card-text>
-          </v-card>
-        </v-flex>
-
-        <v-flex md4>
-          <v-card >
-              <v-card-text color="white" class="accent--text" >
-                 <label class="title">Projects</label>
-              </v-card-text>
-              <v-card-text>
-                <area-chart xtitle="Days" ytitle="Number" :data="chart_data" :download="true"></area-chart>
-              </v-card-text>
-            </v-card>
-        </v-flex>
-
-        <v-flex md4>
           <home-summary-cards></home-summary-cards>
-        </v-flex>
-      </v-layout>
     </v-container>
 
     <div class="space-top-20-neg"></div>
@@ -39,8 +13,11 @@
 
               <v-card >
                 <v-card-title color="white" class="accent--text" >
-                  <label class="title">Latest clients</label>
+                  <label class="title">Current projects</label>
                   <v-spacer></v-spacer>
+                  <v-btn depressed color="accent" to="/projects" >
+                    View all
+                  </v-btn>
                   <v-btn icon small>
                     <v-icon>mdi-dots-vertical</v-icon>
                   </v-btn>
@@ -68,9 +45,16 @@
 
             <v-flex sm12>
               <v-card>
-                <v-card-text color="white" class="accent--text">
-                  <label class="title">Latest candidates</label>
-                </v-card-text>
+                <v-card-title color="white" class="accent--text">
+                  <label class="title">Closed projects</label>
+                  <v-spacer></v-spacer>
+                  <v-btn depressed color="accent" to="/projects" >
+                    View all
+                  </v-btn>
+                  <v-btn icon small>
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </v-card-title>
                 <v-divider></v-divider> 
                 <v-card-text>
                   <RecentCandidates />

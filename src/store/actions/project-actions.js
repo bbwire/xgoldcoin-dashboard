@@ -3,14 +3,13 @@ import service from '@/services/ProjectService'
 import * as types from '../mutation-types'
 
 export const projectActions = {
-  // get all projects
-  getProjects ({commit}) {
+  // get projects by cllient
+  getProjectsByClient({commit}, id) {
     commit(types.START_LOADING)
-    service.getProjects().then(response => {
+    service.getProjectsByClient(id).then(response => {
       if (response.data.error === false) {
-        commit(types.ALL_PROJECTS_SUCCESS, response.data.data)
         console.log(response.data)
-        // commit(types.SUCCESS_MESSAGE, response.data.message)
+        commit(types.PROJECTS_BY_CLIENT_SUCCESS, response.data.data)
       } else {
         console.log(response.data.message)
         commit(types.ERROR_MESSAGE, response.data.message)
@@ -42,7 +41,7 @@ export const projectActions = {
     service.addProject(data).then(response => {
       if (response.data.error === false) {
         console.log(response.data.message)
-        dispatch('getProjects')
+        dispatch('getProjectsByClient', data.client_id)
         commit(types.SUCCESS_MESSAGE, response.data.message)
       } else {
         console.log(response.data.message)

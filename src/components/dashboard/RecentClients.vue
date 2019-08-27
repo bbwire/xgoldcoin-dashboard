@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-simple-table fixedHeader="true">
+        <v-simple-table >
             <thead>
             <tr>
                 <th class="text-left">Name</th>

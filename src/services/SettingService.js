@@ -15,6 +15,18 @@ export default {
   deleteCountry (id) {
     return Api().delete('/v1/countries/' + id)
   },
+  getCities () {
+    return Api().get('/v1/cities')
+  },
+  addCity (data) {
+    return Api().post('/v1/cities', data)
+  },
+  editCity (id, data) {
+    return Api().put('/v1/cities/' + id, data)
+  },
+  deleteCity (id) {
+    return Api().delete('/v1/cities/' + id)
+  },
   // Roles services
   getRoles () {
     return Api().get('/v1/roles')

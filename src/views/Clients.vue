@@ -62,7 +62,7 @@
           </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)" >
+            <v-icon small class="mr-2" >
               mdi-pencil
             </v-icon>
             <v-icon small @click="deleteItem(item)" >

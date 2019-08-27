@@ -1,38 +1,62 @@
 <template>
   <div>
     <v-layout row wrap class="summary-cards">
-      <v-flex xs12>
-        <v-card ripple class="bright-blue-gradient" to="/clients/" dark color="indigo">
+      <v-flex md4 xs12>
+        <v-card ripple to="/clients/" light color="white">
           <v-card-text primary-title center class="uppercase">
-            <p class="headline">{{clients.length}}</p>
-            <p>
-              <v-icon >mdi-menu</v-icon> 
-              Clients
-            </p>
+            <v-layout wrap>
+              <v-flex md10 xs10>
+                <p>
+                  APPLICATIONS
+                </p>
+                <p class="display-1">10,000</p>
+              </v-flex>
+              <v-flex md2 xs2>
+                <v-avatar color="indigo">
+                  <v-icon dark>list</v-icon>
+                </v-avatar>
+              </v-flex>
+            </v-layout>
           </v-card-text>
         </v-card>
       </v-flex>
 
-      <v-flex xs12>
-        <v-card class="secondary--text green-gradient" to="/candidates/" ripple dark >
+      <v-flex md4 xs12>
+        <v-card to="/candidates/" light color="white" >
           <v-card-text center class="uppercase">
-            <p class="headline">{{candidates.length}}</p>
-            <p>
-              <v-icon >mdi-contacts</v-icon> 
-              Candidates
-            </p>
+            <v-layout wrap>
+              <v-flex md10 xs10>
+                <p>
+                  PROJECTS
+                </p>
+                <p class="display-1">10,000</p>
+              </v-flex>
+              <v-flex md2 xs2>
+                <v-avatar color="error">
+                  <v-icon dark>menu</v-icon>
+                </v-avatar>
+              </v-flex>
+            </v-layout>
           </v-card-text>
         </v-card>
       </v-flex> 
 
-      <v-flex xs12>
-        <v-card dark class="blue-green-gradient" to="/users/" ripple color="secondary">
+      <v-flex md4 xs12>
+        <v-card light to="/users/" color="white">
           <v-card-text center class="uppercase">
-            <p class="headline">{{users.length}}</p>
-            <p>
-              <v-icon >mdi-account-multiple</v-icon> 
-              Users
-            </p>
+            <v-layout wrap>
+              <v-flex md10 xs10>
+                <p class="text--uppercase">
+                  NOTIFICATIONS
+                </p>
+                <p class="display-1">100</p>
+              </v-flex>
+              <v-flex md2 xs2>
+                <v-avatar color="success">
+                  <v-icon dark>notifications</v-icon>
+                </v-avatar>
+              </v-flex>
+            </v-layout>
           </v-card-text>
         </v-card>
       </v-flex>

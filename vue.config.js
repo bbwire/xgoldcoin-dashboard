@@ -1,3 +1,3 @@
 module.exports = {
-    publicPath: '/futureadmin/'
+    publicPath: '/future-client/'
   }

@@ -4,7 +4,8 @@
       :value="true"
       color="success"
       icon="check_circle"
-      outline
+      outlined
+      dark
     >
       Redirecting to login please wait...
     </v-alert>

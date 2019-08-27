@@ -1,25 +1,9 @@
 import service from '@/services/ClientService'
+import router from '../../router';
 
 import * as types from '../mutation-types'
 
 export const clientActions = {
-  // get all clients
-  getClients ({commit}) {
-    commit(types.START_LOADING)
-    service.getClients().then(response => {
-      if (response.data.error === false) {
-        commit(types.ALL_CLIENTS_SUCCESS, response.data.data)
-        console.log(response.data)
-        // commit(types.SUCCESS_MESSAGE, response.data.message)
-      } else {
-        console.log(response.data.message)
-        commit(types.ERROR_MESSAGE, response.data.message)
-      }
-    }).catch(error => {
-      console.log(error.message)
-      commit(types.CONNECTION_ERROR_MESSAGE)
-    })
-  },
   // get single client
   getSingleClient({commit}, id) {
     commit(types.START_LOADING)
@@ -37,12 +21,12 @@ export const clientActions = {
     })
   },
   // Add new client
-  addClient ({commit, dispatch}, data) {
+  addClient ({commit}, data) {
     commit(types.START_LOADING)
     service.addClient(data).then(response => {
       if (response.data.error === false) {
         console.log(response.data.message)
-        dispatch('getClients')
+        router.push('/login')
         commit(types.SUCCESS_MESSAGE, response.data.message)
       } else {
         console.log(response.data.message)
@@ -54,12 +38,11 @@ export const clientActions = {
     })
   },
   // Update client
-  updateClient ({commit, dispatch}, payload) {
+  updateClient ({commit}, payload) {
     commit(types.START_LOADING)
     service.updateClient(payload.id, payload.data).then(response => {
       if (response.data.error === false) {
         console.log(response.data.message)
-        dispatch('getClients')
         commit(types.SUCCESS_MESSAGE, response.data.message)
       } else {
         console.log(response.data.message)
@@ -70,13 +53,28 @@ export const clientActions = {
       commit(types.CONNECTION_ERROR_MESSAGE)
     })
   },
-  // Delete client
-  deleteClient ({commit, dispatch}, id) {
+  getClientContactInfo({commit}, id) {
     commit(types.START_LOADING)
-    service.deleteClient(id).then(response => {
+    service.getContactsByClient(id).then(response => {
       if (response.data.error === false) {
         console.log(response.data)
-        dispatch('getClients')
+        if (response.data.data !== null) {
+          commit(types.CONTACTS_BY_CLIENT_SUCCESS, response.data.data)
+        }
+      } else {
+        console.log(response.data.message)
+        commit(types.ERROR_MESSAGE, response.data.message)
+      }
+    }).catch(error => {
+      console.log(error.message)
+      commit(types.CONNECTION_ERROR_MESSAGE)
+    })
+  },
+  updateClientContacts ({commit}, payload) {
+    commit(types.START_LOADING)
+    service.updateClientContacts(payload.id, payload.data).then(response => {
+      if (response.data.error === false) {
+        console.log(response.data.message)
         commit(types.SUCCESS_MESSAGE, response.data.message)
       } else {
         console.log(response.data.message)
@@ -86,5 +84,5 @@ export const clientActions = {
       console.log(error.message)
       commit(types.CONNECTION_ERROR_MESSAGE)
     })
-  }
+  },
 }

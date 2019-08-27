@@ -251,11 +251,11 @@
         }
       }
     },
-    beforeCreate: function () {
-      if (!this.$session.exists()) {
-        this.$router.push('/login/')
-      }
-    },
+    // beforeCreate: function () {
+    //   if (!this.$session.exists()) {
+    //     this.$router.push('/login/')
+    //   }
+    // },
     created () {
       this.id = this.$route.params.id
       this.uid = this.$session.get('uid')

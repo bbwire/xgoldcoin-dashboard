@@ -12,6 +12,10 @@ export const settingMutations = {
   [types.ALL_COUNTRIES_SUCCESS] (state, payload) {
     state.isLoading = false
     state.countries = payload
+  },
+  [types.ALL_CITIES_SUCCESS] (state, payload) {
+    state.isLoading = false
+    state.cities = payload
   }
 }
 

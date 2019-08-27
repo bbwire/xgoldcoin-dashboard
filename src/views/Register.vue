@@ -1,7 +1,7 @@
 <template>
   <v-app id="inspire">
     <v-content 
-      class="login-background-gradient"
+      class="login-background-gradient client-back"
     >
       <v-container
         class="fill-height"
@@ -16,21 +16,45 @@
           >
             <v-card class="elevation-12 text-center pa-8">
               <v-card-text>
-                <span class="headline font-weight-black">Funture Options Client Sign in</span>
+                <span class="headline font-weight-black">Funture Options Client Sign up</span>
               </v-card-text>
 
               <v-card-text>
-                Don't have and account? <router-link to="/register">Register now</router-link>
+                Already have an account? <router-link to="/login">Login now</router-link>
               </v-card-text>
 
               <v-card-text>
-                <v-form ref="form" @keyup.native.enter="login">
+                <v-form ref="form" @keyup.native.enter="register">
+
+                  <v-text-field
+                    label="Company name"
+                    v-model="form_data.name"
+                    type="text"
+                    :rules="[rules.required]"
+                    outlined
+                  ></v-text-field>
+
                   <v-text-field
                     label="Email"
                     v-model="form_data.email"
-                    append-icon="person"
                     type="text"
                     :rules="[rules.required, rules.email]"
+                    outlined
+                  ></v-text-field>
+
+                  <v-text-field
+                    label="Phone"
+                    v-model="form_data.phone"
+                    type="text"
+                    :rules="[rules.required]"
+                    outlined
+                  ></v-text-field>
+
+                  <v-text-field
+                    label="Username"
+                    v-model="form_data.username"
+                    type="text"
+                    :rules="[rules.required]"
                     outlined
                   ></v-text-field>
 
@@ -48,32 +72,32 @@
                   ></v-text-field>
                 </v-form>
 
-                <v-layout justify-space-between>
+                <!-- <v-layout justify-space-between>
                     <router-link to="/password/recovery">Forgot password</router-link>
-                </v-layout>
+                </v-layout> -->
               </v-card-text>
               <v-card-text>
                 <div class="flex-grow-1"></div>
-                <v-btn color="primary" block @click="login" depressed :loading="isLoading">
-                  Sign in
+                <v-btn color="primary" block @click="register" depressed :loading="isLoading">
+                  Sign up now
                 </v-btn>
               </v-card-text>
 
-              <v-card-text>
+              <!-- <v-card-text>
                 <span class="title">or sign in with</span>
               </v-card-text>
 
               <v-card-text>
-                <v-btn color="indigo" tile large outlined class="mr-5" dark  depressed>
+                <v-btn color="indigo" tile large outlined class="mr-5" dark  depressed :loading="isLoading">
                   <v-icon>mdi-facebook</v-icon>
                   Facebook
                 </v-btn>
 
-                <v-btn color="error" tile outlined large dark depressed >
+                <v-btn color="error" tile outlined large dark depressed :loading="isLoading">
                   <v-icon>mdi-google</v-icon>
                   Google
                 </v-btn>
-              </v-card-text>
+              </v-card-text> -->
             </v-card>
           </v-col>
         </v-row>
@@ -99,7 +123,10 @@
         checkbox: false,
         password: 'Password',
         form_data: {
+          name: '',
+          phone: '',
           email: '',
+          username: '',
           password: ''
         },
       }
@@ -124,9 +151,9 @@
         this.$session.set('uid', 1)
         location.reload()
       },
-      login: function () {
+      register: function () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('userLogin', this.form_data)
+          this.$store.dispatch('addClient', this.form_data)
         }
       }
     }
@@ -152,4 +179,6 @@ a {
   .img-align-center {
     text-align: center;
   }
+
+  
 </style>

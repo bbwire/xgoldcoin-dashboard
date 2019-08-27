@@ -1,41 +1,43 @@
 <template>
   <v-app id="inspire">
-    <v-content 
-      class="login-background-gradient"
-    >
+    <v-content>
       <v-container
-        class="fill-height"
+        class="fill-height login-background-gradient"
+        fluid
       >
         <v-row
-          class="d-flex flex-row-reverse"
+          align="center"
+          justify="center"
         >
           <v-col
             cols="12"
             sm="8"
-            md="5"
+            md="4"
           >
-            <v-card class="elevation-12 text-center pa-8">
+            <v-card class="elevation-12">
+              <v-toolbar
+                color="primary"
+                dark
+                flat
+              >
+                <v-toolbar-title>Reset password</v-toolbar-title>
+                <div class="flex-grow-1"></div>
+                
+                <v-btn
+                  icon
+                  target="_blank"
+                  v-on="on"
+                >
+                  <v-icon>mdi-apps</v-icon>
+                </v-btn>
+              </v-toolbar>
               <v-card-text>
-                <span class="headline font-weight-black">Funture Options Client Sign in</span>
-              </v-card-text>
-
-              <v-card-text>
-                Don't have and account? <router-link to="/register">Register now</router-link>
-              </v-card-text>
-
-              <v-card-text>
-                <v-form ref="form" @keyup.native.enter="login">
+                <v-form ref="form">
+                    <p>
+                        Enter new password to reset
+                    </p>
                   <v-text-field
-                    label="Email"
-                    v-model="form_data.email"
-                    append-icon="person"
-                    type="text"
-                    :rules="[rules.required, rules.email]"
-                    outlined
-                  ></v-text-field>
-
-                  <v-text-field
-                    label="Password"
+                    label="New password"
                     v-model="form_data.password"
                     min="8"
                     :append-icon="e1 ? 'visibility' : 'visibility_off'"
@@ -46,34 +48,33 @@
                     required
                     outlined
                   ></v-text-field>
+
+                  <v-text-field
+                    label="Confirm password"
+                    v-model="form_data.cpassword"
+                    min="8"
+                    :append-icon="e1 ? 'visibility' : 'visibility_off'"
+                    :append-icon-cb="() => (e1 = !e1)"
+                    :type="e1 ? 'password' : 'text'"
+                    @click:append="e1 = !e1"
+                    :rules="[rules.required]"
+                    required
+                    outlined
+                  ></v-text-field>
+
                 </v-form>
 
-                <v-layout justify-space-between>
-                    <router-link to="/password/recovery">Forgot password</router-link>
-                </v-layout>
+                <!-- <v-layout justify-space-between>
+                    <router-link to="/login">Go to login</router-link>
+                </v-layout> --> 
               </v-card-text>
-              <v-card-text>
+              <v-divider></v-divider>
+              <v-card-actions>
                 <div class="flex-grow-1"></div>
-                <v-btn color="primary" block @click="login" depressed :loading="isLoading">
-                  Sign in
+                <v-btn color="primary" @click="recovery" depressed :loading="isLoading">
+                  Reset now
                 </v-btn>
-              </v-card-text>
-
-              <v-card-text>
-                <span class="title">or sign in with</span>
-              </v-card-text>
-
-              <v-card-text>
-                <v-btn color="indigo" tile large outlined class="mr-5" dark  depressed>
-                  <v-icon>mdi-facebook</v-icon>
-                  Facebook
-                </v-btn>
-
-                <v-btn color="error" tile outlined large dark depressed >
-                  <v-icon>mdi-google</v-icon>
-                  Google
-                </v-btn>
-              </v-card-text>
+              </v-card-actions>
             </v-card>
           </v-col>
         </v-row>
@@ -96,8 +97,6 @@
       return {
         show1: false,
         e1: true,
-        checkbox: false,
-        password: 'Password',
         form_data: {
           email: '',
           password: ''
@@ -124,9 +123,9 @@
         this.$session.set('uid', 1)
         location.reload()
       },
-      login: function () {
+      recovery: function () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('userLogin', this.form_data)
+          this.$store.dispatch('passwordRecovery', this.form_data)
         }
       }
     }
@@ -151,5 +150,10 @@ a {
 
   .img-align-center {
     text-align: center;
+  }
+
+  .login-background-gradient {
+    background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+    height: 100%;
   }
 </style>

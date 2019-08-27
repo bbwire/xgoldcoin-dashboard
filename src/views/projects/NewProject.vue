@@ -16,7 +16,7 @@
         <v-spacer></v-spacer>
         <template v-if="$vuetify.breakpoint.smAndUp">
 
-          <v-btn color="accent" class="button-gradient" depressed @click.native="addProject">
+          <v-btn color="accent" depressed @click.native="addProject">
             <v-icon>mdi-check</v-icon> Save project
           </v-btn>
 
@@ -209,17 +209,6 @@
             <v-divider></v-divider>
             <div class="space-top-20"></div>
             <v-layout wrap row>
-              
-              <v-flex md4>
-              <v-text-field 
-                v-model="form_data.city" 
-                :rules="[rules.required]" 
-                label="City/Town" 
-                outlined 
-                placeholder="City/Town" 
-                clearable
-              ></v-text-field>
-              </v-flex>
 
               <v-flex md4>
                 <v-autocomplete
@@ -236,8 +225,22 @@
               </v-flex>
 
               <v-flex md4>
+                <v-autocomplete
+                  :items="cities"
+                  v-model="form_data.city_id"
+                  label="City/town"
+                  placeholder="Kampala"
+                  item-text="name"
+                  item-value="id"
+                  :rules="[rules.required]"
+                  class="space-bottom"
+                  outlined
+                ></v-autocomplete>
+              </v-flex>
+
+              <v-flex md4>
               <v-text-field 
-                v-model="form_data.vacancies" 
+                v-model="form_data.number_of_vacancies" 
                 :rules="[rules.required]" 
                 label="Number of vacancies" 
                 outlined 
@@ -311,7 +314,7 @@
 
             <v-layout row>
               <v-flex >
-                <v-btn color="accent" class="button-gradient" depressed @click.native="addProject">
+                <v-btn color="accent" depressed @click.native="addProject">
                   <v-icon>mdi-check</v-icon> Save project
                 </v-btn>
 
@@ -370,7 +373,7 @@
           occupational_skills: '',
           responsibilities: '',
           how_to_apply: '',
-          town: '',
+          city_id: '',
           country_id: null,
           number_of_vacancies: null,
           application_start: '',
@@ -392,7 +395,7 @@
           occupational_skills: '',
           responsibilities: '',
           how_to_apply: '',
-          town: '',
+          city_id: '',
           country_id: null,
           number_of_vacancies: null,
           application_start: '',
@@ -401,11 +404,11 @@
         }
       }
     },
-    beforeCreate: function () {
-      if (!this.$session.exists()) {
-        this.$router.push('/login/')
-      }
-    },
+    // beforeCreate: function () {
+    //   if (!this.$session.exists()) {
+    //     this.$router.push('/login/')
+    //   }
+    // },
     created () {
       this.$store.dispatch('getCountries')
     },
@@ -437,7 +440,8 @@
         'experiences',
         'levels',
         'job_types',
-        'countries'
+        'countries',
+        'cities'
       ])
     },
     methods: {
@@ -456,9 +460,9 @@
       ]),
       addProject () {
         if (this.$refs.form.validate()) {
-          this.form_data.user_id = this.user.id
+          this.form_data.client_id = this.user.id
           this.$store.dispatch('addProject', this.form_data)
-          this.close()
+          
         }
       },
       updateUser (id) {

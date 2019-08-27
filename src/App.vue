@@ -1,13 +1,13 @@
 <template>
   <v-app>
     <v-navigation-drawer
-      dark
-      width="250"
-      permanent
-      :clipped="false"
+      light
+      width="240"
+      :clipped="true"
       app
+      v-model="drawer"
       v-if="menu_display"
-      class="blue-gradient-drawer"
+      :mini-variant="miniVariant"
     >
       <NavigationMenu />
 
@@ -18,47 +18,21 @@
       </template> -->
     </v-navigation-drawer>
     <v-app-bar
-      color="#efefef"
+      color="accent"
       class="elevation-0"
-      light
+      dark
       app
+      clipped-left
+      short
       v-if="menu_display"
     >
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="miniVariant = !miniVariant"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Future Options Dashboard </v-toolbar-title>
+      <v-toolbar-title>Future Options </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon>people</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>notifications</v-icon>
-      </v-btn>
-
-      <v-menu
-        left
-        bottom
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list>
-          <v-list-item
-            v-for="item in menu_items"
-            :key="item.name"
-            @click="() => {}"
-            :to="item.path"
-          >
-            <v-list-item-title>{{item.name}}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+      <ToolbarExtras />
     </v-app-bar>
 
     <v-content>
@@ -71,15 +45,19 @@
 <script>
 import { mapState } from 'vuex'
 import NavigationMenu from './components/commons/NavigationMenu'
+import ToolbarExtras from './components/dashboard/ToolbarExtras'
 
 export default {
   name: 'App',
   components: {
     // HelloWorld,
-    NavigationMenu
+    NavigationMenu,
+    ToolbarExtras
   },
   data: () => ({
     uid: null,
+    drawer: true,
+    miniVariant: false,
     items: [
       ['mdi-email', 'Inbox'],
       ['mdi-account-supervisor-circle', 'Supervisors'],
@@ -104,10 +82,9 @@ export default {
     if (this.$session.exists()) {
       this.uid = this.$session.get('uid')
       this.$store.dispatch('changeMenuDisplay', true)
-      this.$store.dispatch('getClients')
       this.$store.dispatch('getCandidates')
-      this.$store.dispatch('getUsers')
       this.$store.dispatch('getCountries')
+      this.$store.dispatch('getCities')
       this.$store.dispatch('getCurrentUser', this.uid)
     } else {
       this.$store.dispatch('changeMenuDisplay', false)
@@ -117,7 +94,8 @@ export default {
     ...mapState([
       'isLoading',
       'menu_display',
-      'user'
+      'user',
+      'clipped'
     ])
   }
 };
@@ -151,5 +129,20 @@ export default {
 
   .bold {
     font-weight: bold;
+  }
+
+  .back-cover {
+    background: #efefef;
+    height: 100%;
+  }
+
+  .text-center {
+    text-align: center !important;
+  }
+
+  .login-background-gradient {
+    background-image: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+    background-image: url('http://umbrtech.com/futureoptions/assets/img/hrslider.jpg');
+    height: 100%;
   }
 </style>

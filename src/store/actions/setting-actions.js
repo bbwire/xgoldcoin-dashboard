@@ -61,7 +61,74 @@ export const settingActions = {
     service.deleteCountry(id).then(response => {
       if (response.data.error === false) {
         console.log(response.data.message)
-        dispatch('getRoles')
+        dispatch('getCountries')
+        commit(types.SUCCESS_MESSAGE, response.data.message)
+      } else {
+        console.log(response.data.message)
+        commit(types.ERROR_MESSAGE, response.data.message)
+      }
+    }).catch(error => {
+      console.log(error.message)
+      commit(types.CONNECTION_ERROR_MESSAGE)
+    })
+  },
+  getCities ({commit}) {
+    commit(types.START_LOADING)
+    service.getCities().then(response => {
+      if (response.data.error === false) {
+        commit(types.ALL_CITIES_SUCCESS, response.data.data)
+        console.log(response.data)
+        // commit(types.SUCCESS_MESSAGE, response.data.message)
+      } else {
+        console.log(response.data.message)
+        commit(types.ERROR_MESSAGE, response.data.message)
+      }
+    }).catch(error => {
+      console.log(error.message)
+      commit(types.CONNECTION_ERROR_MESSAGE)
+    })
+  },
+  // Add new city
+  addCity ({commit, dispatch}, data) {
+    commit(types.START_LOADING)
+    service.addCity(data).then(response => {
+      if (response.data.error === false) {
+        console.log(response.data.message)
+        dispatch('getCities')
+        commit(types.SUCCESS_MESSAGE, response.data.message)
+      } else {
+        console.log(response.data.message)
+        commit(types.ERROR_MESSAGE, response.data.message)
+      }
+    }).catch(error => {
+      console.log(error.message)
+      commit(types.CONNECTION_ERROR_MESSAGE)
+    })
+  },
+  // Update city
+  updateCity ({commit, dispatch}, payload) {
+    commit(types.START_LOADING)
+    service.editCity(payload.id, payload.data).then(response => {
+      if (response.data.error === false) {
+        console.log(response.data.message)
+        dispatch('getCities')
+        commit(types.SUCCESS_MESSAGE, response.data.message)
+      } else {
+        console.log(response.data.message)
+        commit(types.ERROR_MESSAGE, response.data.message)
+      }
+    }).catch(error => {
+      console.log(error.message)
+      commit(types.CONNECTION_ERROR_MESSAGE)
+    })
+  },
+  // Delete country
+  deleteCity ({commit, dispatch}, id) {
+    commit(types.START_LOADING)
+    service.deleteCity(id).then(response => {
+      if (response.data.error === false) {
+        console.log(response.data.message)
+        dispatch('getCities')
         commit(types.SUCCESS_MESSAGE, response.data.message)
       } else {
         console.log(response.data.message)
