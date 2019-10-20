@@ -10,7 +10,7 @@
         </v-btn>
 
         <v-toolbar-title>
-          Roles
+          Packages
           </v-toolbar-title>
 
         <v-spacer></v-spacer>
@@ -20,7 +20,7 @@
           </v-btn>
 
           <v-btn color="accent" class="button-gradient" depressed @click.native="dialog = true">
-            <v-icon>mdi-plus</v-icon> New role
+            <v-icon>mdi-plus</v-icon> New package
           </v-btn>
 
           
@@ -47,7 +47,7 @@
         <v-data-table
           v-model="selected"
           :headers="headers"
-          :items="roles"
+          :items="packages"
           :single-select="singleSelect"
           :search="search"
           item-key="id"
@@ -77,7 +77,7 @@
         <v-card-title class="accent--text">
           <v-toolbar-title>{{ formTitle }}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon @click="close" class="accent--text">
+          <v-btn x-small fab @click="close" color="accent">
             <v-icon>close</v-icon>
           </v-btn>
         </v-card-title>
@@ -86,8 +86,9 @@
           <div class="space-20"></div>
           <v-form ref="form" lazy-validation>
                             
-              <v-text-field v-model="form_data.name" :rules="[rules.required]" label="Name" outlined placeholder="Admin" clearable></v-text-field>
+              <v-text-field v-model="form_data.name" :rules="[rules.required]" label="Name" outlined placeholder="Silver" clearable></v-text-field>
               <v-text-field v-model="form_data.description" label="Description" outlined placeholder="Description" clearable></v-text-field>
+              <v-text-field v-model="form_data.amount" label="Amount" outlined placeholder="Amount" clearable></v-text-field>
              
           </v-form>
         </v-card-text>
@@ -125,6 +126,7 @@
           { text: '#', sortable: true, value: 'id' },
           { text: 'Name', sortable: true, value: 'name' },
           { text: 'Description', sortable: true, value: 'description' },
+          { text: 'Amount', sortable: true, value: 'amount' },
           { text: 'Action', value: 'action', sortable: false }
         ],
         editedIndex: -1,
@@ -146,7 +148,7 @@
       }
     },
     created () {
-      this.$store.dispatch('getRoles')
+      this.$store.dispatch('getPackages')
     },
     computed: {
       back () {
@@ -163,14 +165,14 @@
         return this.$route.params['page'] ? this.$route.params['page'] : 1
       },
       formTitle () {
-        return this.editedIndex === -1 ? 'New role' : 'Edit role'
+        return this.editedIndex === -1 ? 'New package' : 'Edit package'
       },
       ...mapState([
         'isLoading',
         'errorMessage',
         'successMessage',
         'rules',
-        'roles',
+        'packages',
         'rowsPerpage',
         'user',
       ])
@@ -186,43 +188,43 @@
       ...mapActions([
         // 'getRates'
       ]),
-      addRole () {
+      addPackage () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('addRole', this.form_data)
+          this.$store.dispatch('addPackage', this.form_data)
           this.close()
         }
       },
-      updateRole (id) {
+      updatePackage (id) {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('updateRole', {id: id, data: this.form_data})
+          this.$store.dispatch('updatePackage', {id: id, data: this.form_data})
           this.close()
         }
       },
-      deleteRole (id) {
-        this.$store.dispatch('deleteRole', id)
+      deletePackage (id) {
+        this.$store.dispatch('deletePackage', id)
         console.log('working...' + id)
       },
       checkAction: function (id) {
         if (id === 0) {
-          this.addRole()
+          this.addPackage()
         } else {
-          this.updateRole(id)
+          this.updatePackage(id)
         }
         console.log('working...' + id)
       },
       editItem (item) {
-        this.editedIndex = this.roles.indexOf(item)
+        this.editedIndex = this.packages.indexOf(item)
         this.form_data = Object.assign({}, item)
         this.dialog = true
       },
       deleteItem (id) {
-        confirm('Are you sure you want to delete?') && this.deleteRole(id)
+        confirm('Are you sure you want to delete?') && this.deletePackage(id)
       }
     },
     mounted: function () {
       // this.getDevices()
     },
-    name: 'Roles'
+    name: 'Packages'
   }
 </script>
 

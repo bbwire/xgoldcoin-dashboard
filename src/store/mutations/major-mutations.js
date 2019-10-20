@@ -30,4 +30,16 @@ export const majorMutations = {
     state.isLoading = false
     state.client_contact_info = payload
   },
+  [types.BITCOIN_TRANSACTIONS_BY_CLIENT_SUCCESS] (state, payload) {
+    state.isLoading = false
+    state.bitcoin_transactions = payload
+  },
+  [types.XGOLD_TRANSACTIONS_BY_CLIENT_SUCCESS] (state, payload) {
+    state.isLoading = false
+    state.xgold_transactions = payload
+  },
+  [types.ALL_PACKAGES_SUCCESS] (state, payload) {
+    state.isLoading = false
+    state.packages = payload
+  },
 }

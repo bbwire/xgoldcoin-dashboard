@@ -16,7 +16,7 @@
           >
             <v-card class="elevation-12 text-center pa-8">
               <v-card-text>
-                <span class="headline font-weight-black">Funture Options Client Sign in</span>
+                <span class="headline font-weight-black">Crypto Sign in</span>
               </v-card-text>
 
               <v-card-text>

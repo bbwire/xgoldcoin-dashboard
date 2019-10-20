@@ -1,15 +1,15 @@
-import service from '@/services/UserService'
+import service from '@/services/ProjectService'
 
 import * as types from '../mutation-types'
 
-export const staffActions = {
-  // get single user
-  getSingleUser ({commit}, id) {
+export const projectActions = {
+  // get transactions by cllient
+  getBitcoinTransactionsByClient({commit}, id) {
     commit(types.START_LOADING)
-    service.getSingleUser(id).then(response => {
+    service.getBitcoinTransactionsByClient(id).then(response => {
       if (response.data.error === false) {
         console.log(response.data)
-        commit(types.SINGLE_USER_SUCCESS, response.data.data)
+        commit(types.BITCOIN_TRANSACTIONS_BY_CLIENT_SUCCESS, response.data.data)
       } else {
         console.log(response.data.message)
         commit(types.ERROR_MESSAGE, response.data.message)
@@ -19,29 +19,13 @@ export const staffActions = {
       commit(types.CONNECTION_ERROR_MESSAGE)
     })
   },
-  // get single user
-  getCurrentUser ({commit}, id) {
+  // Add new trasaction
+  addBitcoinTransaction ({commit, dispatch}, data) {
     commit(types.START_LOADING)
-    service.getSingleUser(id).then(response => {
-      if (response.data.error === false) {
-        console.log(response.data)
-        commit(types.CURRENT_USER_SUCCESS, response.data.data)
-      } else {
-        console.log(response.data.message)
-        commit(types.ERROR_MESSAGE, response.data.message)
-      }
-    }).catch(error => {
-      console.log(error.message)
-      commit(types.CONNECTION_ERROR_MESSAGE)
-    })
-  },
-  // Update user
-  updateUser ({commit}, payload) {
-    commit(types.START_LOADING)
-    service.updateUser(payload.id, payload.data).then(response => {
+    service.addBitcoinTransaction(data).then(response => {
       if (response.data.error === false) {
         console.log(response.data.message)
-        // dispatch('getUsers')
+        dispatch('getBitcoinTransactionsByClient', data.member_id)
         commit(types.SUCCESS_MESSAGE, response.data.message)
       } else {
         console.log(response.data.message)
@@ -52,16 +36,45 @@ export const staffActions = {
       commit(types.CONNECTION_ERROR_MESSAGE)
     })
   },
-  // user login
-  userLogin ({commit}, data) {
+  // Update transaction
+  updateBitcoinTransaction ({commit, dispatch}, payload) {
     commit(types.START_LOADING)
-    let self = this
-    service.userLogin(data).then(response => {
+    service.updateBitcoinTransaction(payload.id, payload.data).then(response => {
+      if (response.data.error === false) {
+        console.log(response.data.message)
+        dispatch('getBitcoinTransactionsByClient', data.member_id)
+        commit(types.SUCCESS_MESSAGE, response.data.message)
+      } else {
+        console.log(response.data.message)
+        commit(types.ERROR_MESSAGE, response.data.message)
+      }
+    }).catch(error => {
+      console.log(error.message)
+      commit(types.CONNECTION_ERROR_MESSAGE)
+    })
+  },
+  getXgoldTransactionsByClient({commit}, id) {
+    commit(types.START_LOADING)
+    service.getXgoldTransactionsByClient(id).then(response => {
       if (response.data.error === false) {
         console.log(response.data)
-        self._vm.$session.start()
-        self._vm.$session.set('uid', response.data.data.id)
-        location.reload()
+        commit(types.XGOLD_TRANSACTIONS_BY_CLIENT_SUCCESS, response.data.data)
+      } else {
+        console.log(response.data.message)
+        commit(types.ERROR_MESSAGE, response.data.message)
+      }
+    }).catch(error => {
+      console.log(error.message)
+      commit(types.CONNECTION_ERROR_MESSAGE)
+    })
+  },
+  // Add new trasaction
+  addXgoldTransaction ({commit, dispatch}, data) {
+    commit(types.START_LOADING)
+    service.addTransaction(data).then(response => {
+      if (response.data.error === false) {
+        console.log(response.data.message)
+        dispatch('getTransactionsByClient', data.client_id)
         commit(types.SUCCESS_MESSAGE, response.data.message)
       } else {
         console.log(response.data.message)
@@ -72,11 +85,30 @@ export const staffActions = {
       commit(types.CONNECTION_ERROR_MESSAGE)
     })
   },
-  passwordRecovery ({commit}, data) {
+  // Update transaction
+  updateXgoldTransaction ({commit, dispatch}, payload) {
     commit(types.START_LOADING)
-    service.passwordRecovery(data).then(response => {
+    service.updateXgoldTransaction(payload.id, payload.data).then(response => {
+      if (response.data.error === false) {
+        console.log(response.data.message)
+        dispatch('getXgoldTransactionsByClient', data.member_id)
+        commit(types.SUCCESS_MESSAGE, response.data.message)
+      } else {
+        console.log(response.data.message)
+        commit(types.ERROR_MESSAGE, response.data.message)
+      }
+    }).catch(error => {
+      console.log(error.message)
+      commit(types.CONNECTION_ERROR_MESSAGE)
+    })
+  },
+  // Delete project
+  deleteApplication ({commit, dispatch}, id) {
+    commit(types.START_LOADING)
+    service.deleteApplication(id).then(response => {
       if (response.data.error === false) {
         console.log(response.data)
+        dispatch('getProjects')
         commit(types.SUCCESS_MESSAGE, response.data.message)
       } else {
         console.log(response.data.message)
@@ -86,53 +118,5 @@ export const staffActions = {
       console.log(error.message)
       commit(types.CONNECTION_ERROR_MESSAGE)
     })
-  },
-  // get account balance
-  getAccountBalance ({commit}, id) {
-    commit(types.START_LOADING)
-    service.getAccountBalance(id).then(response => {
-      if (response.data.error === false) {
-        console.log(response.data)
-        commit(types.ACCOUNT_BALANCE_SUCCESS, response.data.data)
-      } else {
-        console.log(response.data.message)
-        commit(types.ERROR_MESSAGE, response.data.message)
-      }
-    }).catch(error => {
-      console.log(error.message)
-      commit(types.CONNECTION_ERROR_MESSAGE)
-    })
-  },  
-  accountVerification ({commit}, token) {
-    commit(types.START_LOADING)
-    service.accountVerification(token).then(response => {
-      if (response.data.error === false) {
-        console.log(response.data.message)
-        // dispatch('getUsers')
-        commit(types.SUCCESS_MESSAGE, response.data.message)
-      } else {
-        console.log(response.data.message)
-        commit(types.ERROR_MESSAGE, response.data.message)
-      }
-    }).catch(error => {
-      console.log(error.message)
-      commit(types.CONNECTION_ERROR_MESSAGE)
-    })
-  },
-  uploadDoc ({commit}, data) {
-    commit(types.START_LOADING)
-    service.uploadDoc(data).then(response => {
-      if (response.data.error === false) {
-        console.log(response.data.message)
-        // dispatch('getUsers')
-        commit(types.SUCCESS_MESSAGE, response.data.message)
-      } else {
-        console.log(response.data.message)
-        commit(types.ERROR_MESSAGE, response.data.message)
-      }
-    }).catch(error => {
-      console.log(error.message)
-      commit(types.CONNECTION_ERROR_MESSAGE)
-    })
-  },
+  }
 }

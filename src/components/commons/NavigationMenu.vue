@@ -2,8 +2,8 @@
     <div>
       
         <v-list-item two-line>
-          <v-list-item-avatar>
-            <img src="https://randomuser.me/api/portraits/women/81.jpg">
+          <v-list-item-avatar size="48">
+            <img :src="user.photo">
           </v-list-item-avatar>
 
           <v-list-item-content>
@@ -16,7 +16,7 @@
       
       <!-- <v-subheader>Menu</v-subheader>
       <v-divider></v-divider> -->
-      <v-list shaped>
+      <v-list nav dense>
         <!-- For user with all privileges -->
         <main-menu></main-menu>
       </v-list>

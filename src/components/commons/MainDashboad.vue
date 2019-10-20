@@ -13,18 +13,20 @@
 
               <v-card >
                 <v-card-title color="white" class="accent--text" >
-                  <label class="title">Current projects</label>
+                  <label class="title">Crypto currency prices</label>
+                  
                   <v-spacer></v-spacer>
-                  <v-btn depressed color="accent" to="/projects" >
-                    View all
-                  </v-btn>
                   <v-btn icon small>
                     <v-icon>mdi-dots-vertical</v-icon>
                   </v-btn>
+                  
                 </v-card-title>
                 <v-divider></v-divider>
                 <v-card-text>
-                  <recent-clients></recent-clients>
+                  <span v-if="coin_data.bitcoin">
+                    <span class="headline font-weight-black d-block mb-5">BTC ${{coin_data.bitcoin.usd}}</span>
+                    <span class="headline font-weight-black d-block">XGOLD ${{coin_data.xgoldcoin.usd}}</span>
+                  </span>
                 </v-card-text>
               </v-card>
 
@@ -46,18 +48,15 @@
             <v-flex sm12>
               <v-card>
                 <v-card-title color="white" class="accent--text">
-                  <label class="title">Closed projects</label>
+                  <label class="title">Calendar</label>
                   <v-spacer></v-spacer>
-                  <v-btn depressed color="accent" to="/projects" >
-                    View all
-                  </v-btn>
                   <v-btn icon small>
                     <v-icon>mdi-dots-vertical</v-icon>
                   </v-btn>
                 </v-card-title>
                 <v-divider></v-divider> 
                 <v-card-text>
-                  <RecentCandidates />
+                  <v-calendar></v-calendar>
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -71,14 +70,15 @@
 <script>
 import { mapState } from 'vuex'
 import HomeSummaryCards from '../commons/HomeSummaryCards'
-import RecentClients from '../dashboard/RecentClients'
-import RecentCandidates from '../dashboard/RecentCandidates'
+// import RecentClients from '../dashboard/RecentClients'
+// import RecentCandidates from '../dashboard/RecentCandidates'
+// import axios from 'axios'
 export default {
   name: 'MainDashboad',
   components: {
     HomeSummaryCards,
-    RecentClients,
-    RecentCandidates
+    // RecentClients,
+    // RecentCandidates
   },
   data () {
     return {
@@ -87,13 +87,26 @@ export default {
       data: [
         {name: 'Successful Validations', },
         {name: 'Failed Validations', data: {'2019-03-01': 4, '2019-03-02': 3, '2019-03-03': 5, '2019-03-04': 9, '2019-03-05': 2, '2019-03-06': 5, '2019-03-07': 10}}
-      ]
+      ],
     }
+  },
+  created () {
+    this.$store.dispatch('getCoinPrices')
   },
   computed: {
     ...mapState([
-      'user'
+      'user',
+      'coin_data'
     ])
+  },
+  mounted () {
+    // axios.get('https://api.coingecko.com/api/v3/simple/price?ids=xgoldcoin%2Cbitcoin&vs_currencies=usd')
+    //   .then(response => {
+    //     this.coin_data = response.data
+    //   }).catch(error => {
+    //     // eslint-disable-next-line
+    //     console.log(error)
+    //   })
   }
 }
 </script>

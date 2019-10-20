@@ -1,18 +1,18 @@
 <template>
   <div class="back-cover">
-    <main-dashboad v-if="user.id"></main-dashboad>
-    <page-redirecting v-else></page-redirecting>
+    <main-dashboad ></main-dashboad>
+    <!-- <page-redirecting v-else></page-redirecting> -->
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import MainDashboad from '@/components/commons/MainDashboad'
-import PageRedirecting from '@/components/commons/PageRedirecting'
+// import PageRedirecting from '@/components/commons/PageRedirecting'
 export default {
   components: {
     MainDashboad,
-    PageRedirecting
+    // PageRedirecting
   },
   name: 'Home',
   data () {

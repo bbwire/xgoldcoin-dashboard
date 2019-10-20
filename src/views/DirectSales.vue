@@ -1,69 +1,69 @@
 <template>
-  <v-container fluid class="back-cover">
-    <v-card flat>
+  <v-container fluid class="back-cover" grid-list-md>
+    <v-card>
       <v-toolbar
-        prominent
         class="elevation-0 accent--text"
-        color="white"
         light
       >
-        <v-btn icon @click.native="back" >
-          <v-icon color="accent">arrow_left</v-icon>
+        <v-btn icon >
+          <v-icon color="accent">menu</v-icon>
         </v-btn>
 
         <v-toolbar-title>
-          Loan Schedule
+          Direct commission
           </v-toolbar-title>
 
         <v-spacer></v-spacer>
-        <!-- <v-btn color="error" @click.native="dialog = false" v-if="selected.length">
-          <v-icon>delete</v-icon> Delete selected
-        </v-btn> -->
+        <template v-if="$vuetify.breakpoint.smAndUp">
 
-        <v-btn icon>
-          <v-icon color="accent">more_vert</v-icon>
-        </v-btn>
+          <!-- <v-btn color="accent" depressed @click.native="addMember">
+            <v-icon>mdi-check</v-icon> Add member
+          </v-btn> -->
+
+          
+
+          <v-btn icon>
+            <v-icon color="accent">mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
       </v-toolbar>
       <v-divider></v-divider>
       <v-card-title>       
           <v-spacer></v-spacer>
           <!-- <el-input placeholder="Please search" prefix-icon="el-icon-search" v-model="search"></el-input> -->
-          <!-- <v-text-field
+          <v-text-field
               v-model="search"
               append-icon="search"
               label="Search"
-              placeholder="Search"
-              single-line
+              outlined
               color="accent"
-          ></v-text-field> -->
+          ></v-text-field>
       </v-card-title>
       <v-card-text>
+
         <v-data-table
+          v-model="selected"
           :headers="headers"
-          :items="loan_schedule"
-          item-key="id"
+          :items="users"
+          :single-select="singleSelect"
           :search="search"
+          item-key="id"
+          show-select
           class="elevation-0"
           :loading="isLoading"
-          :rows-per-page-items="rowsPerpage"
+          loading-text="Loading data..."
         >
-          <template v-slot:items="props">
-            <td>{{ props.index+1 }}</td>
-            <td>{{ props.item.payment }}</td>
-            <td>{{ props.item.interest }}</td>
-            <td>{{ props.item.principal }}</td>
-            <td>{{ props.item.balance }}</td>
-            <!-- <td >
-              <v-btn icon small @click.native="editItem(props.item)">
-                <v-icon small color="success"> edit </v-icon>
-              </v-btn>
-              <v-btn icon small @click.native="deleteItem(props.item.id)">
-                <v-icon small color="error"> delete </v-icon>
-              </v-btn>
-            </td> -->
+
+          <template v-slot:item.action="{ item }">
+            <!-- <v-icon small class="mr-2" @click="editItem(item)" >
+              mdi-pencil
+            </v-icon> -->
+            <v-icon small @click="deleteItem(item)" >
+              mdi-delete
+            </v-icon>
           </template>
         </v-data-table>
-
+          
       </v-card-text>
       <snack-bar v-if="successMessage" :color="'success'" :text="successMessage"></snack-bar>
       <snack-bar v-if="errorMessage" :color="'error'" :text="errorMessage"></snack-bar>
@@ -78,13 +78,15 @@
   import SnackBar from '@/components/commons/SnackBar.vue'
   export default {
     components: {
-      SnackBar
+      SnackBar,
     },
     data () {
       return {
         dialog: false,
+        start_modal: false,
+        e1: true,
         show1: false,
-        menu: false,
+        singleSelect: false,
         id: 0,
         search: '',
         pagination: {},
@@ -92,21 +94,28 @@
         tab: null,
         uid: null,
         headers: [
-          { text: 'Installment', sortable: true, value: 'index' },
-          { text: 'Payment', sortable: true, value: 'client.name' },
-          { text: 'Interest', sortable: true, value: 'client.email' },
-          { text: 'Principal', sortable: true, value: 'client.phone' },
-          { text: 'Balance', sortable: true, value: 'principal' },
+          { text: '#', sortable: true, value: 'index' },
+          { text: 'From', sortable: true, value: 'from' },
+          { text: 'Amount', sortable: true, value: 'amount' },
+          { text: 'Time ago', sortable: true, value: 'created_at' },
+          { text: 'Action', value: 'action', sortable: false }
         ],
+        editedIndex: -1,
+        form_data: {
+          id: 0,
+        },
+        default_data: {
+          id: 0,
+        }
       }
     },
-    // beforeCreate: function () {
-    //   if (!this.$session.exists()) {
-    //     this.$router.push('/logout/')
-    //   }
-    // },
+    beforeCreate: function () {
+      if (!this.$session.exists()) {
+        this.$router.push('/login/')
+      }
+    },
     created () {
-      this.$store.dispatch('getLoanSchedule', this.$route.params.id)
+    //   this.$store.dispatch('getCountries')
     },
     computed: {
       back () {
@@ -122,19 +131,17 @@
       page () {
         return this.$route.params['page'] ? this.$route.params['page'] : 1
       },
-      formTitle () {
-        return this.editedIndex === -1 ? 'New loan application' : 'Edit loan application'
-      },
       ...mapState([
         'isLoading',
         'errorMessage',
         'successMessage',
         'rules',
-        'clients',
-        'loan_schedule',
-        'roles',
         'rowsPerpage',
         'user',
+        'sex',
+        'directions',
+        'countries',
+        'cities'
       ])
     },
     methods: {
@@ -145,14 +152,24 @@
           this.editedIndex = -1
         }, 300)
       },
+      reset () {
+        this.form_data = Object.assign({}, this.default_data)
+      },
       ...mapActions([
         // 'getRates'
       ]),
+      addMember () {
+        if (this.$refs.form.validate()) {
+          this.form_data.leader_id = this.user.id
+          this.$store.dispatch('addClient', this.form_data)
+          
+        }
+      },
     },
     mounted: function () {
       // this.getDevices()
     },
-    name: 'LoanSchedule'
+    name: 'NewMember'
   }
 </script>
 

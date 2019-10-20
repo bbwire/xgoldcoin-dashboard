@@ -15,7 +15,7 @@
             <v-toolbar-title>{{user.first_name}} {{user.last_name}}</v-toolbar-title>
 
             <v-spacer></v-spacer>
-            <v-btn color="accent" @click.native="updateUserDummy" :disabled="isLoading">
+            <v-btn color="accent" @click.native="updateUser" :disabled="isLoading">
             Save changes
             </v-btn>
 
@@ -29,10 +29,13 @@
         <v-card-text>
           <v-layout wrap>
             <v-flex md3>
-              <v-card flat>
-                <v-card-media>
-                  <img :src="user.photo">
-                </v-card-media>
+              <v-card flat class="text-center pa-2" outlined>
+                <v-img :src="user.photo">
+                </v-img>
+                <v-card-text>
+                  <span class="d-block title font-weight-black">{{user.first_name}} {{user.last_name}}</span>
+                  <span class="d-block title font-weight-black">{{user.email}}</span>
+                </v-card-text>
               </v-card>
             </v-flex>
             <v-flex md9>
@@ -49,6 +52,7 @@
                       :rules="[rules.required]"
                       clearable
                       class="space-bottom"
+                      outlined
                       ></v-text-field>
 
                   </v-flex>
@@ -63,6 +67,7 @@
                       :rules="[rules.required]"
                       clearable
                       class="space-bottom"
+                      outlined
                       ></v-text-field>
 
                   </v-flex>
@@ -77,6 +82,7 @@
                       item-value="id"
                       :rules="[rules.required]"
                       class="space-bottom"
+                      outlined
                       ></v-autocomplete>
 
                   </v-flex>
@@ -91,6 +97,7 @@
                       :rules="[rules.required]"
                       clearable
                       class="space-bottom"
+                      outlined
                       ></v-text-field>
 
                   </v-flex>
@@ -105,43 +112,35 @@
                       :rules="[rules.required]"
                       clearable
                       class="space-bottom"
+                      outlined
                       ></v-text-field>
 
                   </v-flex>
 
                   <v-flex md6>
-                    <v-menu
-                      ref="menu"
-                      :close-on-content-click="false"
-                      v-model="menu"
-                      :nudge-right="40"
-                      :return-value.sync="user.date_of_birth"
-                      lazy
-                      persistent
-                      transition="scale-transition"
-                      full-width
-                      min-width="290px"
-                      >
-                      <v-text-field
-                          slot="activator"
-                          v-model="user.date_of_birth"
-                          label="Date of birth"
-                          placeholder="Date of birth"
-                          readonly
-                          clearable
-                      ></v-text-field>
-                      <v-date-picker 
-                        v-model="user.date_of_birth" 
-                        no-title 
-                        scrollable
-                        :max="new Date().toISOString().substr(0, 10)"
-                        min="1950-01-01"
-                      >
-                        <v-spacer></v-spacer>
-                        <v-btn flat color="primary" @click="menu = false">Cancel</v-btn>
-                        <v-btn flat color="primary" @click="$refs.menu.save(user.date_of_birth)">OK</v-btn>
-                      </v-date-picker>
-                      </v-menu>
+                    <v-dialog
+                  ref="sdialog"
+                  v-model="menu"
+                  :return-value.sync="user.date_of_birth"
+                  persistent
+                  full-width
+                  width="290px"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="user.date_of_birth"
+                      label="Date of birth"
+                      readonly
+                      v-on="on"
+                      outlined
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="user.date_of_birth" scrollable>
+                    <div class="flex-grow-1"></div>
+                    <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+                    <v-btn text color="primary" @click="$refs.sdialog.save(user.date_of_birth)">OK</v-btn>
+                  </v-date-picker>
+                </v-dialog>
                   </v-flex>
 
                   <v-flex md6>
@@ -154,6 +153,7 @@
                       :rules="[rules.required]"
                       clearable
                       class="space-bottom"
+                      outlined
                       ></v-text-field>
 
                   </v-flex>
@@ -170,46 +170,81 @@
                 </v-layout>
               </v-form>
               <div class="space-20"></div>
-              <v-subheader>Change password </v-subheader>
-              <v-form ref="passwordform" lazy-validation>
-                <v-layout row>
-                  <v-flex>
-                    <v-text-field
-                      v-model="password_data.old_password"
-                      validate-on-blur
-                      label="Current password"
-                      placeholder="Current password"
-                      :rules="[rules.required]"
-                      :append-icon="show1 ? 'visibility_off' : 'visibility'"
-                      :type="show1 ? 'text' : 'password'"
-                      @click:append="show1 = !show1"
-                      clearable
-                      class="space-bottom"
-                    ></v-text-field>
-                  </v-flex>
+              <v-card outlined class="pa-4 mb-5">
+                <div class="mb-3 title">Change password</div>
+                <v-form ref="passwordform" lazy-validation>
+                  <v-layout row>
+                    <v-flex>
+                      <v-text-field
+                        v-model="password_data.old_password"
+                        validate-on-blur
+                        label="Current password"
+                        placeholder="Current password"
+                        :rules="[rules.required]"
+                        :append-icon="show1 ? 'visibility_off' : 'visibility'"
+                        :type="show1 ? 'text' : 'password'"
+                        @click:append="show1 = !show1"
+                        clearable
+                        class="space-bottom"
+                        outlined
+                      ></v-text-field>
+                    </v-flex>
 
-                  <v-flex>
-                    <v-text-field
-                      v-model="password_data.password"
-                      validate-on-blur
-                      label="New password"
-                      placeholder="New password"
-                      :rules="[rules.required]"
-                      :append-icon="show2 ? 'visibility_off' : 'visibility'"
-                      :type="show2 ? 'text' : 'password'"
-                      @click:append="show2 = !show2"
-                      clearable
-                      class="space-bottom"
-                    ></v-text-field>
-                  </v-flex>
+                    <v-flex>
+                      <v-text-field
+                        v-model="password_data.password"
+                        validate-on-blur
+                        label="New password"
+                        placeholder="New password"
+                        :rules="[rules.required]"
+                        :append-icon="show2 ? 'visibility_off' : 'visibility'"
+                        :type="show2 ? 'text' : 'password'"
+                        @click:append="show2 = !show2"
+                        clearable
+                        class="space-bottom"
+                        outlined
+                      ></v-text-field>
+                    </v-flex>
 
-                  <v-flex>
-                    <v-btn class="white--text" color="accent" @click.native="updatePassword" :disabled="isLoading">
-                    Change password 
+                    <v-flex>
+                      <v-btn class="white--text" color="accent" @click.native="updatePassword" :disabled="isLoading">
+                      Change password 
+                      </v-btn>
+                    </v-flex>
+                  </v-layout>
+                </v-form>
+              </v-card>
+
+              <v-card outlined class="pa-4 mb-5">
+                <div class="mb-3 title">Sponsor url</div>
+                <v-text-field
+                  required
+                  validate-on-blur
+                  label="Username"
+                  class="space-bottom"
+                  outlined
+                  readonly
+                  :value="`http://localhost:8080/#/register?sponsor=${user.username}`"
+                  ></v-text-field>
+              </v-card>
+
+              
+              <v-card outlined class="pa-4">
+                <div class="mb-3 title">Please upload atleast 1 identity document</div>
+                <v-form ref="dos" lazy-validation>
+                  <label class="bold" style="display: block;">Choose document</label>
+                      <input
+                      type="file"
+                      ref="image"
+                      accept="image/*"
+                      @change="handleDocUpload($event)"/>
+
+                    <v-btn class="white--text" color="accent" @click.native="uploadDocument" :disabled="isLoading">
+                      Upload
                     </v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-form>
+                </v-form>
+              </v-card>
+              
             </v-flex>
           </v-layout>
         </v-card-text>
@@ -248,14 +283,17 @@
         password_data: {
           old_password: '',
           password: ''
+        },
+        form_data: {
+          doc: null
         }
       }
     },
-    // beforeCreate: function () {
-    //   if (!this.$session.exists()) {
-    //     this.$router.push('/login/')
-    //   }
-    // },
+    beforeCreate: function () {
+      if (!this.$session.exists()) {
+        this.$router.push('/login/')
+      }
+    },
     created () {
       this.id = this.$route.params.id
       this.uid = this.$session.get('uid')
@@ -288,7 +326,15 @@
           formData.append('date_of_birth', this.user.date_of_birth)
           formData.append('sex', this.user.sex)
           formData.append('username', this.user.username)
-          this.$store.dispatch('updateUser', {id: this.uid, data: formData})
+          this.$store.dispatch('updateClient', {id: this.uid, data: formData})
+        }
+      },
+      uploadDoc: function () {
+        if (this.$refs.form.validate()) {
+          let formData = new FormData()
+          formData.append('member_id', this.user.id)
+          formData.append('doc', this.form_data.doc)
+          this.$store.dispatch('uploadDoc', formData)
         }
       },
       updatePassword () {
@@ -300,6 +346,11 @@
         // this.files.append('photo', this.$refs.photo.files[0])
         this.editeddata.photo = event.target.files[0]
         console.log(this.editeddata.photo)
+      },
+      handleDocUpload: function (event) {
+        // this.files.append('photo', this.$refs.photo.files[0])
+        this.form_data.doc = event.target.files[0]
+        console.log(this.form_data.doc)
       }
     },
     mounted: function () {

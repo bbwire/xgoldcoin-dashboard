@@ -16,7 +16,7 @@
           >
             <v-card class="elevation-12 text-center pa-8">
               <v-card-text>
-                <span class="headline font-weight-black">Funture Options Client Sign up</span>
+                <span class="headline font-weight-black">Crypto Sign up</span>
               </v-card-text>
 
               <v-card-text>
@@ -26,12 +26,20 @@
               <v-card-text>
                 <v-form ref="form" @keyup.native.enter="register">
 
-                  <v-text-field
+                  <!-- <v-text-field
                     label="Company name"
                     v-model="form_data.name"
                     type="text"
                     :rules="[rules.required]"
                     outlined
+                  ></v-text-field> -->
+                  <v-text-field
+                    label="Sponsor"
+                    v-model="form_data.sponsor"
+                    type="text"
+                    outlined
+                    readonly
+                    v-if="form_data.sponsor !== null"
                   ></v-text-field>
 
                   <v-text-field
@@ -123,6 +131,7 @@
         checkbox: false,
         password: 'Password',
         form_data: {
+          sponsor: null,
           name: '',
           phone: '',
           email: '',
@@ -135,6 +144,12 @@
       if (this.$session.exists()) {
         this.$router.push('/')
       }
+    },
+    created () {
+      let url = window.location.href
+      let hashes = url.split("?")[1]
+      let param_values = hashes.split("=")
+      this.form_data.sponsor = param_values[1]
     },
     computed: {
       ...mapState([
@@ -156,7 +171,8 @@
           this.$store.dispatch('addClient', this.form_data)
         }
       }
-    }
+    },
+    name: 'register'
   }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->

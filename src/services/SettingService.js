@@ -40,6 +40,21 @@ export default {
   deleteRole (id) {
     return Api().delete('/v1/roles/' + id)
   },
+  getPackages () {
+    return Api().get('/v1/packages')
+  },
+  getSinglePackage (id) {
+    return Api().get('/v1/packages/' + id)
+  },
+  addPackage (data) {
+    return Api().post('/v1/packages', data)
+  },
+  editPackage (id, data) {
+    return Api().put('/v1/packages/' + id, data)
+  },
+  deletePackage (id) {
+    return Api().delete('/v1/packages/' + id)
+  },
   // Settings
   getSettings () {
     return Api().get('/v1/settings')
@@ -86,5 +101,9 @@ export default {
       // For Firefox it is necessary to delay revoking the ObjectURL
       window.URL.revokeObjectURL(data)
     }, 10000)
-  }
+  },
+  getCoinPrices () {
+    return Api().get('https://api.coingecko.com/api/v3/simple/price?ids=xgoldcoin%2Cbitcoin&vs_currencies=usd')
+  },
+  
 }

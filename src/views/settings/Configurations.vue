@@ -15,7 +15,10 @@
             <v-toolbar-title>Configurations</v-toolbar-title>
 
             <v-spacer></v-spacer>
-            <v-btn color="accent" @click.native="settingsTest" :disabled="isLoading">
+            <v-btn color="accent" @click.native="addSettings" v-if="!settings.id" :disabled="isLoading">
+            Save changes
+            </v-btn>
+            <v-btn color="accent" @click.native="editSettings" v-else :disabled="isLoading">
             Save changes
             </v-btn>
 
@@ -31,9 +34,10 @@
             <v-layout row wrap>
             <!--<div class="padding&#45;&#45;16">-->
             <v-flex md4 xs12 sm6>
+              
               <!-- <el-input placeholder="First name" v-model="editeddata.fname"></el-input> -->
               <v-text-field
-              v-model="settings.name"
+              v-model="settings.app_name"
               required
               validate-on-blur
               label="App name"
@@ -41,33 +45,22 @@
               :rules="[rules.required]"
               clearable
               class="space-bottom"
+              outlined
               ></v-text-field>
 
             </v-flex>
 
             <v-flex md4 xs12 sm6>
                 <v-text-field
-                v-model="settings.max_days"
+                v-model="settings.withdraw_charge"
                 required
                 validate-on-blur
-                label="Max days"
-                placeholder="Max days"
-                clearable
-                class="space-bottom"
-                ></v-text-field>
-
-            </v-flex>
-
-            <v-flex md4 xs12 sm6>
-                <v-text-field
-                v-model="settings.service_charge"
-                required
-                validate-on-blur
-                label="Service charge"
-                placeholder="Service charge"
+                label="Withdraw charge (%)"
+                placeholder="2"
                 :rules="[rules.required]"
                 clearable
                 class="space-bottom"
+                outlined
                 ></v-text-field>
 
             </v-flex>
@@ -75,39 +68,74 @@
             <div class="space-top-20" style="display: block; margin-top: 20px;"></div>
 
             <v-flex md6 sm6>
-              <label class="space-top-20 bold">Notofications</label>
+              <label class="space-top-20 bold mb-3">Package contribution</label>
 
-              <v-layout row>
+              <v-layout row class="mt-3">
               
               <v-flex md6 sm6>
-                <v-switch 
-                  v-model="settings.emails" 
-                  label="Send email to clients" 
-                  color="accent" 
-                  :true-value="1" 
-                  :false-value="0"></v-switch>
+                <v-text-field
+                v-model="settings.xgold_contribution"
+                required
+                validate-on-blur
+                label="XGOLD contribution (%)"
+                placeholder="10"
+                :rules="[rules.required]"
+                clearable
+                class="space-bottom"
+                outlined
+                ></v-text-field>
               </v-flex>
 
               <v-flex md6 sm6>
-                <v-switch 
-                v-model="settings.sms" 
-                label="Send sms" 
-                color="accent" 
-                :true-value="1" 
-                :false-value="0"></v-switch>
+                <v-text-field
+                  v-model="settings.bitcoin_contribution"
+                  required
+                  validate-on-blur
+                  label="BTC contribution (%)"
+                  placeholder="90"
+                  :rules="[rules.required]"
+                  clearable
+                  class="space-bottom"
+                  outlined
+                  ></v-text-field>
               </v-flex>
               </v-layout>
             </v-flex>
 
             <v-flex md6 sm6>
-              <label class="space-top-20 bold">Payments</label>
+              <label class="space-top-20 bold mb-3">Commissions</label>
+
+              <v-layout row class="mt-3">
               
-              <v-switch 
-                v-model="settings.payments" 
-                label="Make online payment" 
-                color="accent" 
-                :true-value="1" 
-                :false-value="0"></v-switch>
+              <v-flex md6 sm6>
+                <v-text-field
+                v-model="settings.direct_commission"
+                required
+                validate-on-blur
+                label="Direct commission (%)"
+                placeholder="20"
+                :rules="[rules.required]"
+                clearable
+                class="space-bottom"
+                outlined
+                ></v-text-field>
+              </v-flex>
+
+              <v-flex md6 sm6>
+                <v-text-field
+                  v-model="settings.indirect_commission"
+                  required
+                  validate-on-blur
+                  label="Indirect commission (%)"
+                  placeholder="10"
+                  :rules="[rules.required]"
+                  clearable
+                  class="space-bottom"
+                  outlined
+                  ></v-text-field>
+              </v-flex>
+              </v-layout>
+
             </v-flex>
 
             <!-- <v-flex md2 sm6>
@@ -184,7 +212,7 @@
       }
     },
     created () {
-      // this.getClassesByLevel('O Level')
+      this.$store.dispatch('getSettings')
     },
     computed: {
       back () {
@@ -214,12 +242,7 @@
       },
       editSettings: function () {
         if (this.$refs.form.validate()) {
-          let formData = new FormData()
-          formData.append('title', this.settings.title)
-          formData.append('account_balance', this.settings.account_balance)
-          formData.append('sms_rate', this.settings.sms_rate)
-
-          this.$store.dispatch('editSettings', {id: this.settings.id, data: formData})
+          this.$store.dispatch('editSettings', {id: this.settings.id, data: this.settings})
         }
       },
       // handleSchoolBannerUpload: function (event) {

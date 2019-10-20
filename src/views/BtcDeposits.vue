@@ -1,26 +1,23 @@
 <template>
-  <v-container fluid class="back-cover">
+  <v-container fluid class="back-cover" grid-list-md>
     <v-card>
       <v-toolbar
         class="elevation-0 accent--text"
         light
       >
         <v-btn icon >
-          <v-icon color="accent">mdi-apps</v-icon>
+          <v-icon color="accent">menu</v-icon>
         </v-btn>
 
         <v-toolbar-title>
-          Roles
+          Bitcoin Deposits
           </v-toolbar-title>
 
         <v-spacer></v-spacer>
         <template v-if="$vuetify.breakpoint.smAndUp">
-          <v-btn color="error" @click.native="dialog = false" v-if="selected.length" class="mr-2">
-            <v-icon>delete</v-icon> Delete selected
-          </v-btn>
 
-          <v-btn color="accent" class="button-gradient" depressed @click.native="dialog = true">
-            <v-icon>mdi-plus</v-icon> New role
+          <v-btn color="accent" depressed @click="dialog = true">
+            <v-icon>mdi-plus</v-icon> Make a deposit
           </v-btn>
 
           
@@ -47,7 +44,7 @@
         <v-data-table
           v-model="selected"
           :headers="headers"
-          :items="roles"
+          :items="users"
           :single-select="singleSelect"
           :search="search"
           item-key="id"
@@ -58,15 +55,15 @@
         >
 
           <template v-slot:item.action="{ item }">
-            <v-icon small class="mr-2" @click="editItem(item)" >
+            <!-- <v-icon small class="mr-2" @click="editItem(item)" >
               mdi-pencil
-            </v-icon>
+            </v-icon> -->
             <v-icon small @click="deleteItem(item)" >
               mdi-delete
             </v-icon>
           </template>
         </v-data-table>
-
+          
       </v-card-text>
       <snack-bar v-if="successMessage" :color="'success'" :text="successMessage"></snack-bar>
       <snack-bar v-if="errorMessage" :color="'error'" :text="errorMessage"></snack-bar>
@@ -85,20 +82,22 @@
         <v-card-text>
           <div class="space-20"></div>
           <v-form ref="form" lazy-validation>
-                            
-              <v-text-field v-model="form_data.name" :rules="[rules.required]" label="Name" outlined placeholder="Admin" clearable></v-text-field>
-              <v-text-field v-model="form_data.description" label="Description" outlined placeholder="Description" clearable></v-text-field>
-             
+              <v-text-field v-model="form_data.amount" :rules="[rules.required]" label="Amount (USD)" outlined clearable></v-text-field>
+              <v-text-field v-model="form_data.btc_price" :rules="[rules.required]" label="Bitcoin price" outlined clearable></v-text-field>
+              
+              <v-text-field v-model="form_data.btc_amount" :rules="[rules.required]" label="BTC Amount" outlined clearable></v-text-field>
+              
           </v-form>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions class="grey lighten-4">
           <v-btn color="error darken-1" depressed dark @click.native="close">Cancel</v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" depressed dark @click.native="checkAction(form_data.id)">Save</v-btn>
+          <v-btn color="blue darken-1" depressed dark @click.native="checkAction(form_data.id)">Deposit</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
   </v-container>
 </template>
 
@@ -108,11 +107,13 @@
   import SnackBar from '@/components/commons/SnackBar.vue'
   export default {
     components: {
-      SnackBar
+      SnackBar,
     },
     data () {
       return {
         dialog: false,
+        start_modal: false,
+        e1: true,
         show1: false,
         singleSelect: false,
         id: 0,
@@ -122,21 +123,24 @@
         tab: null,
         uid: null,
         headers: [
-          { text: '#', sortable: true, value: 'id' },
-          { text: 'Name', sortable: true, value: 'name' },
-          { text: 'Description', sortable: true, value: 'description' },
+          { text: '#', sortable: true, value: 'index' },
+          { text: 'Amount(USD)', sortable: true, value: 'amount' },
+          { text: 'Amount(BTC)', sortable: true, value: 'btc_amount' },
+          { text: 'Time ago', sortable: true, value: 'created_at' },
           { text: 'Action', value: 'action', sortable: false }
         ],
         editedIndex: -1,
         form_data: {
           id: 0,
-          name: null,
-          description: null,
+          amount: '',
+          btc_price: '',
+          btc_amount: ''
         },
         default_data: {
           id: 0,
-          name: null,
-          description: null,
+          amount: '',
+          btc_price: '',
+          btc_amount: ''
         }
       }
     },
@@ -146,7 +150,7 @@
       }
     },
     created () {
-      this.$store.dispatch('getRoles')
+    //   this.$store.dispatch('getCountries')
     },
     computed: {
       back () {
@@ -163,16 +167,19 @@
         return this.$route.params['page'] ? this.$route.params['page'] : 1
       },
       formTitle () {
-        return this.editedIndex === -1 ? 'New role' : 'Edit role'
+        return this.editedIndex === -1 ? 'New deposit' : 'Edit deposit'
       },
       ...mapState([
         'isLoading',
         'errorMessage',
         'successMessage',
         'rules',
-        'roles',
         'rowsPerpage',
         'user',
+        'sex',
+        'directions',
+        'countries',
+        'cities'
       ])
     },
     methods: {
@@ -183,46 +190,24 @@
           this.editedIndex = -1
         }, 300)
       },
+      reset () {
+        this.form_data = Object.assign({}, this.default_data)
+      },
       ...mapActions([
         // 'getRates'
       ]),
-      addRole () {
+      addMember () {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('addRole', this.form_data)
-          this.close()
+          this.form_data.leader_id = this.user.id
+          this.$store.dispatch('addClient', this.form_data)
+          
         }
       },
-      updateRole (id) {
-        if (this.$refs.form.validate()) {
-          this.$store.dispatch('updateRole', {id: id, data: this.form_data})
-          this.close()
-        }
-      },
-      deleteRole (id) {
-        this.$store.dispatch('deleteRole', id)
-        console.log('working...' + id)
-      },
-      checkAction: function (id) {
-        if (id === 0) {
-          this.addRole()
-        } else {
-          this.updateRole(id)
-        }
-        console.log('working...' + id)
-      },
-      editItem (item) {
-        this.editedIndex = this.roles.indexOf(item)
-        this.form_data = Object.assign({}, item)
-        this.dialog = true
-      },
-      deleteItem (id) {
-        confirm('Are you sure you want to delete?') && this.deleteRole(id)
-      }
     },
     mounted: function () {
       // this.getDevices()
     },
-    name: 'Roles'
+    name: 'BtcDeposit'
   }
 </script>
 

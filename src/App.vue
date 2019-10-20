@@ -2,7 +2,7 @@
   <v-app>
     <v-navigation-drawer
       light
-      width="240"
+      width="260"
       :clipped="true"
       app
       v-model="drawer"
@@ -23,12 +23,11 @@
       dark
       app
       clipped-left
-      short
       v-if="menu_display"
     >
       <v-app-bar-nav-icon @click="miniVariant = !miniVariant"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Future Options </v-toolbar-title>
+      <v-toolbar-title>Crypto Dashboard</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -82,9 +81,8 @@ export default {
     if (this.$session.exists()) {
       this.uid = this.$session.get('uid')
       this.$store.dispatch('changeMenuDisplay', true)
-      this.$store.dispatch('getCandidates')
-      this.$store.dispatch('getCountries')
-      this.$store.dispatch('getCities')
+      // this.$store.dispatch('getCountries')
+      this.$store.dispatch('getPackages')
       this.$store.dispatch('getCurrentUser', this.uid)
     } else {
       this.$store.dispatch('changeMenuDisplay', false)

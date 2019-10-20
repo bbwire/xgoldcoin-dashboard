@@ -2,19 +2,15 @@
   <div>
     <v-layout row wrap class="summary-cards">
       <v-flex md4 xs12>
-        <v-card ripple to="/clients/" light color="white">
+        <v-card ripple light color="white" class="pa-2 indigo--text">
           <v-card-text primary-title center class="uppercase">
             <v-layout wrap>
-              <v-flex md10 xs10>
+              <v-flex>
                 <p>
-                  APPLICATIONS
+                  Balance
                 </p>
-                <p class="display-1">10,000</p>
-              </v-flex>
-              <v-flex md2 xs2>
-                <v-avatar color="indigo">
-                  <v-icon dark>list</v-icon>
-                </v-avatar>
+                <span class="headline font-weight-black d-block">XGOLD 0.006790</span>
+                <span class="headline font-weight-black d-block">BTC 0.0000078</span>
               </v-flex>
             </v-layout>
           </v-card-text>
@@ -22,19 +18,15 @@
       </v-flex>
 
       <v-flex md4 xs12>
-        <v-card to="/candidates/" light color="white" >
+        <v-card light ripple color="white" class="pa-2 success--text" >
           <v-card-text center class="uppercase">
             <v-layout wrap>
-              <v-flex md10 xs10>
+              <v-flex>
                 <p>
-                  PROJECTS
+                  Direct Commission
                 </p>
-                <p class="display-1">10,000</p>
-              </v-flex>
-              <v-flex md2 xs2>
-                <v-avatar color="error">
-                  <v-icon dark>menu</v-icon>
-                </v-avatar>
+                <span class="headline font-weight-black d-block">USD 74</span>
+                <span class="headline font-weight-black d-block">.</span>
               </v-flex>
             </v-layout>
           </v-card-text>
@@ -42,19 +34,15 @@
       </v-flex> 
 
       <v-flex md4 xs12>
-        <v-card light to="/users/" color="white">
+        <v-card light ripple color="white" class="pa-2 error--text">
           <v-card-text center class="uppercase">
             <v-layout wrap>
-              <v-flex md10 xs10>
-                <p class="text--uppercase">
-                  NOTIFICATIONS
+              <v-flex>
+                <p>
+                  Indirect Commission
                 </p>
-                <p class="display-1">100</p>
-              </v-flex>
-              <v-flex md2 xs2>
-                <v-avatar color="success">
-                  <v-icon dark>notifications</v-icon>
-                </v-avatar>
+                <span class="headline font-weight-black d-block">USD 100</span>
+                <span class="headline font-weight-black d-block">.</span>
               </v-flex>
             </v-layout>
           </v-card-text>
@@ -91,11 +79,11 @@ export default {
     font-size: 16px;
   }
 
-  /* .summary-cards
+  .summary-cards
    .v-card {
     border-top: 5px solid !important;
     padding-bottom: 0px;
-  } */
+  }
 
   .summary-cards .v-card__text {
     padding: 10px;
