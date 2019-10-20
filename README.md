@@ -1,4 +1,4 @@
-# futureoptionsadmin
+# xgoldcoindashboard
 
 ## Project setup
 ```
